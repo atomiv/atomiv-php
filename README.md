@@ -1,2 +1,2 @@
-# atomiv-backend-php-laravel
-Atomiv - Backend (PHP - Laravel)
+# atomiv-backend-api-php-laravel
+Atomiv - Backend (API - PHP - Laravel)
