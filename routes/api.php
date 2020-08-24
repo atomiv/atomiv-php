@@ -24,3 +24,10 @@ Route::get('customers','CustomerController@getAllCustomers');
 Route::post('customers','CustomerController@create');
 Route::put('customers/{id}','CustomerController@update');
 Route::delete('customers/{id}','CustomerController@delete');
+
+//Products
+Route::get('products/{id}','ProductController@getProduct');
+Route::get('products','ProductController@getAllProducts');
+Route::post('products','ProductController@create');
+Route::put('products/{id}','ProductController@update');
+Route::delete('products/{id}','ProductController@delete');
