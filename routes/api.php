@@ -31,3 +31,11 @@ Route::get('products','ProductController@getAllProducts');
 Route::post('products','ProductController@create');
 Route::put('products/{id}','ProductController@update');
 Route::delete('products/{id}','ProductController@delete');
+
+//Orders
+
+Route::get('orders/{id}','OrderController@getOrder');
+Route::get('orders','OrderController@getAllOrders');
+Route::post('orders','OrderController@create');
+Route::put('orders/{id}','OrderController@update');
+Route::delete('orders/{id}','OrderController@delete');
