@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use App\Product;
 class ProductController extends Controller
@@ -12,7 +14,7 @@ class ProductController extends Controller
 
         $product = Product::find($id);
         if ($product)
-            return response($product,200);
+            return response(new ProductResource($product),200);
 
         return response('Product not found.',404);
     }
@@ -21,7 +23,7 @@ class ProductController extends Controller
 
         $products = Product::all();
 
-        return response($products,200);
+        return response(new ProductCollection($products),200);
     }
 
     public function create(ProductCreateRequest $request){
@@ -29,7 +31,7 @@ class ProductController extends Controller
         $product = Product::create($request->all());
 
         if ($product)
-            return response($product,201);
+            return response(new ProductResource($product),201);
 
         return response('The product is not created',422);
     }

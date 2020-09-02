@@ -4,19 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
-use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Resources\OrderCollection;
+use App\Http\Resources\OrderResource;
 use App\OrderItem;
-use Illuminate\Http\Request;
 use App\Order;
-use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
     public function getOrder($id){
-        $order = Order::with('orderItems')->where('id',$id)->get();
+        $order = Order::with('orderItems')->where('id',$id)->first();
 
         if ($order)
-            return response($order,200);
+            return response(new OrderResource($order),200);
 
         return response('Order not found.',404);
     }
@@ -25,7 +24,7 @@ class OrderController extends Controller
 
         $orders = Order::with('orderItems')->get();
 
-        return response($orders,200);
+        return response(new OrderCollection($orders),200);
     }
 
     public function create(OrderCreateRequest $request){
@@ -43,7 +42,7 @@ class OrderController extends Controller
         }
 
         if ($order)
-            return response('Order successfuly created',201);
+            return response(['message' => 'Order successfully created','order' => new OrderResource($order)],201);
 
         return response('The order is not created',422);
 
