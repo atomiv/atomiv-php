@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Http\Requests\CustomerCreateRequest;
+use App\Http\Requests\CustomerUpdateRequest;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -23,11 +25,7 @@ class CustomerController extends Controller
         return response($customers,200);
     }
 
-    public function create(Request $request){
-        $this->validate($request,[
-            'first_name' => 'string|required',
-            'last_name' => 'string|required'
-        ]);
+    public function create(CustomerCreateRequest $request){
 
         $customer = Customer::create($request->all());
 
@@ -37,11 +35,7 @@ class CustomerController extends Controller
         return response('Customer is not created',422);
     }
 
-    public function update(Request $request,$id){
-        $this->validate($request,[
-            'first_name' => 'string|nullable',
-            'first_last' => 'string|nullable',
-        ]);
+    public function update(CustomerUpdateRequest $request,$id){
 
         $customer = Customer::whereId($id)->update($request->all());
 

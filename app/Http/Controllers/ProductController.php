@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductCreateRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use Illuminate\Http\Request;
 use App\Product;
 class ProductController extends Controller
@@ -16,17 +18,13 @@ class ProductController extends Controller
     }
 
     public function getAllProducts(){
+
         $products = Product::all();
 
         return response($products,200);
     }
 
-    public function create(Request $request){
-        $this->validate($request,[
-            'code' => 'string|required',
-            'description' => 'string|nullable',
-            'unit_price' => 'numeric|gt:0'
-        ]);
+    public function create(ProductCreateRequest $request){
 
         $product = Product::create($request->all());
 
@@ -36,12 +34,7 @@ class ProductController extends Controller
         return response('The product is not created',422);
     }
 
-    public function update(Request $request,$id){
-        $this->validate($request,[
-            'code' => 'string',
-            'description' => 'string',
-            'unit_price' => 'numeric|gt:0'
-        ]);
+    public function update(ProductUpdateRequest $request,$id){
 
         $product = Product::whereId($id)->update($request->all());
 

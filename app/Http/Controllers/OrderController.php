@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderCreateRequest;
+use App\Http\Requests\OrderUpdateRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\OrderItem;
 use Illuminate\Http\Request;
 use App\Order;
@@ -25,18 +28,7 @@ class OrderController extends Controller
         return response($orders,200);
     }
 
-    public function create(Request $request){
-
-       $validator = Validator::make($request->items,[
-            'product_id.*' => 'int|required',
-            'product_price.*' => 'numeric|gt:0|required',
-            'product_code.*' => 'string|required',
-            'quantity.*' => 'int|required'
-        ]);
-
-        if ($validator->fails())
-            return response($validator->errors(),422);
-
+    public function create(OrderCreateRequest $request){
 
         $order = Order::create(['customer_id'=>$request->input('customer_id')]);
 
@@ -57,13 +49,7 @@ class OrderController extends Controller
 
     }
 
-    public function update(Request $request,$id){
-       $this->validate($request,[
-            'product_id' => 'int',
-            'product_price' => 'numeric|gt:0',
-            'product_code' => 'string',
-            'quantity' => 'int'
-        ]);
+    public function update(OrderUpdateRequest $request,$id){
 
         $orderItems = OrderItem::where('id',$id)->update($request->all());
 
