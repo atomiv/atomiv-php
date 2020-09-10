@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repository\ProductRepository;
 use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
-use Illuminate\Http\Request;
-use App\Product;
+
 class ProductController extends Controller
 {
+    private $productRepo;
+
+    public function __construct(ProductRepository $productRepo){
+        $this->productRepo = $productRepo;
+    }
+
     public function getProduct($id){
 
-        $product = Product::find($id);
+        $product = $this->productRepo->find($id);
+
         if ($product)
             return response(new ProductResource($product),200);
 
@@ -21,14 +28,14 @@ class ProductController extends Controller
 
     public function getAllProducts(){
 
-        $products = Product::all();
+        $products = $this->productRepo->all();
 
         return response(new ProductCollection($products),200);
     }
 
     public function create(ProductCreateRequest $request){
 
-        $product = Product::create($request->all());
+        $product = $this->productRepo->save($request->all());
 
         if ($product)
             return response(new ProductResource($product),201);
@@ -38,7 +45,7 @@ class ProductController extends Controller
 
     public function update(ProductUpdateRequest $request,$id){
 
-        $product = Product::whereId($id)->update($request->all());
+        $product = $this->productRepo->update($id,$request->all());
 
         if ($product)
             return response('Product successfully updated',200);
@@ -46,7 +53,7 @@ class ProductController extends Controller
         return response('The product is not updated',422);
     }
     public function delete($id){
-        $product = Product::destroy($id);
+        $product = $this->productRepo->delete($id);
 
         if ($product)
             return response('Product successfully deleted',200);

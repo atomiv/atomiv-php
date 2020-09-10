@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Customer;
+use App\Http\Repository\CustomerRepository;
 use App\Http\Requests\CustomerCreateRequest;
 use App\Http\Requests\CustomerUpdateRequest;
 use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
-use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    private $customerRepo;
+
+    public function __construct(CustomerRepository $customerRepo)
+    {
+        $this->customerRepo = $customerRepo;
+    }
+
     public function getCustomer($id){
 
-        $customer = Customer::find($id);
+        $customer = $this->customerRepo->find($id);
+
         if ($customer)
             return response(new CustomerResource($customer),200);
 
@@ -22,14 +29,14 @@ class CustomerController extends Controller
 
     public function getAllCustomers(){
 
-        $customers = Customer::all();
+        $customers = $this->customerRepo->all();
 
         return response(new CustomerCollection($customers),200);
     }
 
     public function create(CustomerCreateRequest $request){
 
-        $customer = Customer::create($request->all());
+        $customer = $this->customerRepo->save($request->all());
 
         if ($customer)
             return response(new CustomerResource($customer),201);
@@ -39,7 +46,7 @@ class CustomerController extends Controller
 
     public function update(CustomerUpdateRequest $request,$id){
 
-        $customer = Customer::whereId($id)->update($request->all());
+        $customer = $this->customerRepo->update($id,$request->all());
 
         if ($customer)
             return response('Customer successfully updated',200);
@@ -48,7 +55,7 @@ class CustomerController extends Controller
     }
 
     public function delete($id){
-        $customer = Customer::destroy($id);
+        $customer = $this->customerRepo->delete($id);
 
         if ($customer)
             return response('Customer successfully deleted',200);
