@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderUpdateRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class OrderUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'integer',
-            'quantity' => 'integer'
+            'code' => 'string',
+            'description' => 'string',
+            'unit_price' => 'numeric|gt:0'
         ];
     }
 }

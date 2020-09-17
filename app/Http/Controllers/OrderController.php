@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Repository\OrderRepository;
-use App\Http\Requests\OrderCreateRequest;
-use App\Http\Requests\OrderUpdateRequest;
+use App\Http\Requests\Order\CreateOrderRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
-use App\OrderItem;
-use App\Order;
 
 class OrderController extends Controller
 {
@@ -35,7 +33,7 @@ class OrderController extends Controller
         return response(new OrderCollection($orders),200);
     }
 
-    public function create(OrderCreateRequest $request){
+    public function create(CreateOrderRequest $request){
 
         $order = $this->orderRepo->save($request->all());
 
@@ -46,7 +44,7 @@ class OrderController extends Controller
 
     }
 
-    public function update(OrderUpdateRequest $request,$id){
+    public function update(UpdateProductRequest $request, $id){
 
         $orderItems = $this->orderRepo->update($id,$request->all());
 

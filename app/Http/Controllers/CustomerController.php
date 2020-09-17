@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Repository\CustomerRepository;
-use App\Http\Requests\CustomerCreateRequest;
-use App\Http\Requests\CustomerUpdateRequest;
+use App\Http\Requests\Customer\CreateCustomerRequest;
+use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
 
@@ -34,7 +34,7 @@ class CustomerController extends Controller
         return response(new CustomerCollection($customers),200);
     }
 
-    public function create(CustomerCreateRequest $request){
+    public function create(CreateCustomerRequest $request){
 
         $customer = $this->customerRepo->save($request->all());
 
@@ -44,7 +44,7 @@ class CustomerController extends Controller
         return response('Customer is not created',422);
     }
 
-    public function update(CustomerUpdateRequest $request,$id){
+    public function update(UpdateCustomerRequest $request,$id){
 
         $customer = $this->customerRepo->update($id,$request->all());
 

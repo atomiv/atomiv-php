@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Repository\ProductRepository;
-use App\Http\Requests\ProductCreateRequest;
-use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Requests\Product\CreateProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 
@@ -33,7 +33,7 @@ class ProductController extends Controller
         return response(new ProductCollection($products),200);
     }
 
-    public function create(ProductCreateRequest $request){
+    public function create(CreateProductRequest $request){
 
         $product = $this->productRepo->save($request->all());
 
@@ -43,7 +43,7 @@ class ProductController extends Controller
         return response('The product is not created',422);
     }
 
-    public function update(ProductUpdateRequest $request,$id){
+    public function update(UpdateProductRequest $request, $id){
 
         $product = $this->productRepo->update($id,$request->all());
 

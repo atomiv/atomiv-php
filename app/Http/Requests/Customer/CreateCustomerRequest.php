@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderCreateRequest extends FormRequest
+class CreateCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,8 @@ class OrderCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'customer_id' => 'integer|required',
-            'items.*.product_id' => 'integer|required',
-            'items.*.quantity' => 'integer|required'
+            'first_name' => 'string|required',
+            'last_name' => 'string|required'
         ];
-
     }
 }
