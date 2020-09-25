@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Customer;
+namespace App\Http\Requests\Customers;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,8 +24,8 @@ class UpdateCustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'string',
-            'last_name' => 'string'
+            'first_name' => 'regex:/^[\pL\s]+$/u|max:32',
+            'last_name' => 'regex:/^[\pL\s]+$/u|max:32'
         ];
     }
 }

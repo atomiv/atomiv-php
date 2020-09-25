@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Repository\CustomerRepository;
-use App\Http\Requests\Customer\CreateCustomerRequest;
-use App\Http\Requests\Customer\UpdateCustomerRequest;
+use App\Http\Requests\Customers\CreateCustomerRequest;
+use App\Http\Requests\Customers\UpdateCustomerRequest;
 use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
 
