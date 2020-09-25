@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-
-Route::get('products/{id}','ProductController@getProduct');
-Route::get('products','ProductController@getAllProducts');
-Route::post('products','ProductController@create');
-Route::put('products/{id}','ProductController@update');
-Route::delete('products/{id}','ProductController@delete');
+Route::prefix('products')->group(function (){
+    Route::get('/{id}','ProductController@getProduct');
+    Route::get('/','ProductController@getAllProducts');
+    Route::post('/','ProductController@create');
+    Route::put('/{id}','ProductController@update');
+    Route::delete('/{id}','ProductController@delete');
+});
