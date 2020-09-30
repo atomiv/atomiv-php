@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Repository\OrderRepository;
-use App\Http\Requests\Order\CreateOrderRequest;
-use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Requests\Orders\CreateOrderRequest;
+use App\Http\Requests\Products\UpdateProductRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
 
