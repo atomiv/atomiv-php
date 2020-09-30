@@ -26,7 +26,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'code' => 'string|max:32',
             'description' => 'string',
-            'unit_price' => 'numeric|gt:0|max:12'
+            'unit_price' => 'numeric|gt:0'
         ];
     }
 }
