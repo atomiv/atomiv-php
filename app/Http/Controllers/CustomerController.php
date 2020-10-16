@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Repository\CustomerRepository;
 use App\Http\Requests\Customers\CreateCustomerRequest;
 use App\Http\Requests\Customers\UpdateCustomerRequest;
 use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
+use App\Services\CustomerService;
 
 class CustomerController extends Controller
 {
-    private $customerRepo;
+    private $customerService;
 
-    public function __construct(CustomerRepository $customerRepo)
+    public function __construct(CustomerService $customerService)
     {
-        $this->customerRepo = $customerRepo;
+        $this->customerService = $customerService;
     }
 
     public function getCustomer($id){
 
-        $customer = $this->customerRepo->find($id);
+        $customer = $this->customerService->getCustomer($id);
 
         if ($customer)
             return response(new CustomerResource($customer),200);
@@ -29,14 +29,14 @@ class CustomerController extends Controller
 
     public function getAllCustomers(){
 
-        $customers = $this->customerRepo->all();
+        $customers = $this->customerService->getAllCustomers();
 
         return response(new CustomerCollection($customers),200);
     }
 
     public function create(CreateCustomerRequest $request){
 
-        $customer = $this->customerRepo->save($request->all());
+        $customer = $this->customerService->save($request->all());
 
         if ($customer)
             return response(new CustomerResource($customer),201);
@@ -46,7 +46,7 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request,$id){
 
-        $customer = $this->customerRepo->update($id,$request->all());
+        $customer = $this->customerService->update($id,$request->all());
 
         if ($customer)
             return response('Customer successfully updated',200);
@@ -55,7 +55,7 @@ class CustomerController extends Controller
     }
 
     public function delete($id){
-        $customer = $this->customerRepo->delete($id);
+        $customer = $this->customerService->delete($id);
 
         if ($customer)
             return response('Customer successfully deleted',200);

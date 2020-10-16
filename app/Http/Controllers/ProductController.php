@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Repository\ProductRepository;
+
 use App\Http\Requests\Products\CreateProductRequest;
 use App\Http\Requests\Products\UpdateProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
+use App\Services\ProductService;
 
 class ProductController extends Controller
 {
-    private $productRepo;
+    private $productService;
 
-    public function __construct(ProductRepository $productRepo){
-        $this->productRepo = $productRepo;
+    public function __construct(ProductService $productService){
+        $this->productService = $productService;
     }
 
     public function getProduct($id){
 
-        $product = $this->productRepo->find($id);
+        $product = $this->productService->getProduct($id);
 
         if ($product)
             return response(new ProductResource($product),200);
@@ -28,14 +29,14 @@ class ProductController extends Controller
 
     public function getAllProducts(){
 
-        $products = $this->productRepo->all();
+        $products = $this->productService->getAllProducts();
 
         return response(new ProductCollection($products),200);
     }
 
     public function create(CreateProductRequest $request){
 
-        $product = $this->productRepo->save($request->all());
+        $product = $this->productService->save($request->all());
 
         if ($product)
             return response(new ProductResource($product),201);
@@ -45,7 +46,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, $id){
 
-        $product = $this->productRepo->update($id,$request->all());
+        $product = $this->productService->update($id,$request->all());
 
         if ($product)
             return response('Product successfully updated',200);
@@ -53,7 +54,7 @@ class ProductController extends Controller
         return response('The product is not updated',422);
     }
     public function delete($id){
-        $product = $this->productRepo->delete($id);
+        $product = $this->productService->delete($id);
 
         if ($product)
             return response('Product successfully deleted',200);

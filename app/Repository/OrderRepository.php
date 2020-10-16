@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Http\Repository;
+namespace App\Repository;
 
-use App\Http\Repository\Interfaces\BaseRepository;
+use App\Repository\Interfaces\BaseRepository;
 use App\Order;
-use App\OrderItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderRepository implements BaseRepository
 {
     private $orderModel;
-    private $orderItemRepo;
 
-    public function __construct(Order $orderModel, OrderItemRepository $orderItemRepo)
+    public function __construct(Order $orderModel)
     {
         $this->orderModel = $orderModel;
-        $this->orderItemRepo = $orderItemRepo;
     }
 
     public function find(int $id): ?Model
@@ -31,19 +28,13 @@ class OrderRepository implements BaseRepository
 
     public function save(array $attributes): ?Model
     {
+       return $this->orderModel->create(['customer_id'=>$attributes['customer_id'],'order_date'=>now()]);
 
-        $order  = $this->orderModel->create(['customer_id'=>$attributes['customer_id'],'order_date'=>now()]);
-
-        $attributes['order_id'] = $order->id;
-
-        $this->orderItemRepo->saveMany($attributes);
-
-        return $order->load('orderItems');
     }
 
     public function update(int $id, array $attributes): ?bool
     {
-        return $this->orderItemRepo->updateMany($attributes['items']);
+//        return $this->orderItemRepo->updateMany($attributes['items']);
 
     }
 
