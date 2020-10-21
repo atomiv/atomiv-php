@@ -55,6 +55,7 @@ class OrderService
     public function update(int $id,array $attributes){
 
         foreach ($attributes as $item){
+
             $order_item_id = $item['order_item_id'];
             unset($item['order_item_id']);
 
@@ -63,8 +64,21 @@ class OrderService
                 $item['product_code'] = $product->code;
                 $item['product_price'] = $product->unit_price;
             }
-            $this->orderItem->updateMany($order_item_id,$item);
+
+            $order_items = $this->orderItem->update($order_item_id,$item);
         }
+
+        return $this->order->find($id);
+
     }
 
+    public function delete(int $id){
+        $order = $this->order->find($id);
+
+        $this->orderItem->deleteMany($order->orderItems->pluck('id'));
+
+       return $this->order->delete($order->id);
+
+
+    }
 }

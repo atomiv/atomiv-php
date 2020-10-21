@@ -7,7 +7,7 @@ use App\Http\Requests\Products\UpdateProductRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
 use App\Services\OrderService;
-
+use App\Order;
 class OrderController extends Controller
 {
     private $orderService;
@@ -47,22 +47,22 @@ class OrderController extends Controller
 
     public function update(UpdateProductRequest $request, $id){
 
-      $orderItems = $this->orderService->update($id,$request->all());
+        $order = $this->orderService->update($id,$request->orderItems);
 
-        if ($orderItems)
-            return response('Order successfully updated',200);
+        if ($order)
+            return response(['message'=>'Order successfully updated','order' => new OrderResource($order)],200);
 
         return response('The order is not updated',422);
 
     }
 
-//    public function delete($id){
-//       $order = $this->orderService->delete($id);
-//
-//        if ($order)
-//            return response('Order successfully deleted',200);
-//
-//        return response('The order is not deleted',409);
-//    }
+    public function delete($id){
+       $order = $this->orderService->delete($id);
+
+        if ($order)
+            return response('Order successfully deleted',200);
+
+        return response('The order is not deleted',409);
+    }
 
 }

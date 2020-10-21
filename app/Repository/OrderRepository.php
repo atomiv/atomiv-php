@@ -34,17 +34,13 @@ class OrderRepository implements BaseRepository
 
     public function update(int $id, array $attributes): ?bool
     {
-//        return $this->orderItemRepo->updateMany($attributes['items']);
-
+        // TODO: Implement update() method.
     }
 
     public function delete(int $id): ?bool
     {
-        $order = $this->find($id);
+        return $this->orderModel->destroy($id);
 
-        $this->orderItemRepo->deleteMany($order->orderItems->pluck('id'));
-
-       return $order->delete();
     }
 
 }

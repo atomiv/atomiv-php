@@ -47,12 +47,6 @@ class OrderItemRepository implements BaseRepository
         return $this->orderItemModel->insert($attributes);
     }
 
-    public function updateMany(int $id,array $attributes): ?bool{
-
-     return $this->orderItemModel->whereId($id)->update($attributes);
-
-    }
-
     public function deleteMany($ids): ?bool
     {
         return $this->orderItemModel->destroy($ids);
