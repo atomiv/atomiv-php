@@ -33,11 +33,11 @@ class CustomerService
 
     public function update($attributes,$id){
 
-        return $this->update($attributes,$id);
+        return $this->customer->update($attributes,$id);
     }
 
     public function delete($id){
 
-        return $this->delete($id);
+        return $this->customer->delete($id);
     }
 }
