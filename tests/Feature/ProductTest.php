@@ -35,6 +35,8 @@ class ProductTest extends TestCase
 
         $response = $this->post('api/products',$this->product->toArray());
 
+        $this->get('/api/products/'.$this->product->id)->assertSee($this->product->code,$this->product->description);
+
         $response->assertStatus(201);
     }
 
@@ -43,7 +45,8 @@ class ProductTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas('products',['id' => $this->product->id,'code'=> '123456']);
+        $this->get('/api/products/'.$this->product->id)->assertSee('123456');
+
     }
 
     public function testDeleteProduct(){
@@ -51,7 +54,7 @@ class ProductTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('products',['id'=>$this->product->id]);
+        $this->get('/api/products/'.$this->product->id)->assertSee(null);
 
     }
 }
