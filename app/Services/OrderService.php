@@ -29,9 +29,9 @@ class OrderService
 
     }
 
-    public function save(array $attributes)
+    public function insert(array $attributes)
     {
-        $order = $this->orderRepository->save($attributes);
+        $order = $this->orderRepository->insert($attributes);
 
         $attributes['order_id'] = $order->id;
 
@@ -47,7 +47,7 @@ class OrderService
                 'quantity' => $attribute['quantity']
             ];
         }
-        $this->orderItemRepository->saveMany($items);
+        $this->orderItemRepository->insertMany($items);
 
         return $order->load('orderItems');
     }

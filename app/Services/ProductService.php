@@ -25,9 +25,9 @@ class ProductService
         return $this->productRepository->all();
     }
 
-    public function save($attributes){
+    public function insert($attributes){
 
-        return $this->productRepository->save($attributes);
+        return $this->productRepository->insert($attributes);
     }
 
     public function update($attributes,$id){

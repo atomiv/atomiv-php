@@ -26,7 +26,7 @@ class OrderRepository implements BaseRepository
       return $this->orderModel->with('orderItems')->get();
     }
 
-    public function save(array $attributes): ?Model
+    public function insert(array $attributes): ?Model
     {
        return $this->orderModel->create(['customer_id'=>$attributes['customer_id'],'order_date'=>now()]);
 
