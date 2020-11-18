@@ -27,7 +27,7 @@ class OrderItemRepository implements BaseRepository
         // TODO: Implement all() method.
     }
 
-    public function save(array $attributes): ?Model
+    public function insert(array $attributes): ?Model
     {
         // TODO: Implement save() method.
     }
@@ -42,7 +42,7 @@ class OrderItemRepository implements BaseRepository
         return $this->orderItemModel->destroy($id);
     }
 
-    public function saveMany(array $attributes): ?bool{
+    public function insertMany(array $attributes): ?bool{
 
         return $this->orderItemModel->insert($attributes);
     }

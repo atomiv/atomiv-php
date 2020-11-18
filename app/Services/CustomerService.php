@@ -26,9 +26,9 @@ class CustomerService
         return $this->customerRepository->all();
     }
 
-    public function save($attributes){
+    public function insert($attributes){
 
-        return $this->customerRepository->save($attributes);
+        return $this->customerRepository->insert($attributes);
     }
 
     public function update($attributes,$id){
