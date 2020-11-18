@@ -10,6 +10,8 @@ use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $customer;
 
     public function setUp(): void
@@ -21,51 +23,81 @@ class CustomerTest extends TestCase
 
 
     public function testListSingleCustomer(){
+
         $response = $this->get('/api/customers/'.$this->customer->id);
 
         $response->assertStatus(200);
+
     }
 
     public function testListAllCustomers(){
        $response = $this->get('/api/customers');
 
        $response->assertStatus(200);
+
     }
 
     public function testCreateNewCustomer(){
 
-        $response = $this->post('api/customers',$this->customer->toArray());
-
-        $this->get('api/customers/' . $this->customer->id)->assertSee($this->customer->first_name,$this->customer->last_name);
+        $response = $this->post('api/customers',$this->validFields());
 
         $response->assertStatus(201);
+
+        $this->get('api/customers/' . $response["id"])
+            ->assertSee($this->validFields()['first_name'],$this->validFields()['last_name']);
+
     }
 
     public function testCustomerFirstNameRequired(){
-         $this->post('api/customers',['first_name'=> null])
-                ->assertSessionHasErrors('first_name');
 
+         $this->post('api/customers',$this->validFields(['first_name'=>null]))
+                ->assertSessionHasErrors('first_name');
     }
+
     public function testCustomerLastNameRequired(){
-        $this->post('api/customers',['last_name'=> null])
+
+        $this->post('api/customers',$this->validFields(['last_name'=>null]))
             ->assertSessionHasErrors('last_name');
 
     }
 
+    public function testCustomerFirstNameHaveTotBeWithoutNumbers(){
+
+        $this->post('api/customers',$this->validFields(['first_name'=>"Jonh123"]))
+            ->assertSessionHasErrors('first_name');
+    }
+
+    public function testCustomerLastNameHaveTotBeWithoutNumbers(){
+
+        $this->post('api/customers',$this->validFields(['last_name'=>"Doe123"]))
+            ->assertSessionHasErrors('last_name');
+    }
+
     public function testUpdateCustomer(){
+
         $response = $this->put('api/customers/' . $this->customer->id,['first_name' => 'John']);
 
         $response->assertStatus(200);
 
         $this->get('api/customers/' . $this->customer->id)->assertSee('John');
+
     }
 
     public function testDeleteCustomer(){
+
         $response = $this->delete('api/customers/' . $this->customer->id);
 
         $response->assertStatus(200);
 
         $this->get('api/customers/' . $this->customer->id)->assertSee(null);
 
+    }
+
+    protected function validFields($overrides = []){
+
+        return array_merge([
+            'first_name' => "John",
+            "last_name" => "Doe"
+        ],$overrides);
     }
 }
