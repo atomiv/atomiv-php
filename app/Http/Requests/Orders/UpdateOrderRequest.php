@@ -24,8 +24,9 @@ class UpdateOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'integer',
-            'quantity' => 'integer'
+            'items.*.order_item_id' => 'integer|required',
+            'items.*.product_id' => 'integer',
+            'items.*.quantity' => 'integer'
         ];
     }
 }
