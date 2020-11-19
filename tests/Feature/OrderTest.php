@@ -22,9 +22,9 @@ class OrderTest extends TestCase
 
         factory(Product::class,5)->create();
 
-        $customer = factory(Customer::class)->create();
+        $this->customer = factory(Customer::class)->create();
 
-        $this->order = factory(Order::class)->create(['customer_id' => $customer->id]);
+        $this->order = factory(Order::class)->create(['customer_id' => $this->customer->id]);
 
         $this->order->orderItems()->createMany(
             factory(OrderItem::class, 3)->make()->toArray()
@@ -47,16 +47,52 @@ class OrderTest extends TestCase
         $response->assertStatus(200);
     }
 
-    protected function validFields($overrides){
+    public function testCreateNewOrderWithOrderItems(){
+
+        $response = $this->post('api/orders',$this->validFields());
+
+        $response->assertStatus(201);
+
+
+        $this->get('/api/orders/'. $response["order"]["id"])
+            ->assertStatus(200);
+
+    }
+
+    public function testUpdateOrderItems(){
+
+        $response = $this->put('api/orders/' . $this->order->id,
+            $this->validFields([
+                "items"=> [
+                    [
+                        "order_item_id" => $this->order->orderItems[0]->id,
+                        "quantity"=>5,
+                    ]
+                ]
+            ]));
+
+        $response->assertStatus(200);
+
+    }
+
+    public function testDeleteOrderWithItems()
+    {
+        $response = $this->delete('api/products/' . $this->order->id);
+
+        $response->assertStatus(200);
+
+        $this->get('/api/orders/'.$this->order->id)->assertSee(null);
+    }
+
+    protected function validFields($overrides = []){
 
         return array_merge([
             "customer_id" => $this->customer->id,
             "items" =>[
                 [
-                    "order_item_id" => 2,
                     "product_id" => 1,
                     "quantity" => 2
-                ]
+                ],
             ]
         ],$overrides);
     }
