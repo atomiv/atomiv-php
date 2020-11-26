@@ -15,12 +15,13 @@ class OrderTest extends TestCase
 
     private $order;
     private $customer;
+    private $product;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        factory(Product::class,5)->create();
+        $this->product = factory(Product::class,5)->create();
 
         $this->customer = factory(Customer::class)->create();
 
@@ -31,7 +32,6 @@ class OrderTest extends TestCase
         );
 
     }
-
 
     public function testListSingleOrder(){
 
@@ -59,19 +59,69 @@ class OrderTest extends TestCase
 
     }
 
-    public function testUpdateOrderItems(){
+    public function testToCreateNewOrderProductIdFieldIsRequired(){
+        $response = $this->post('api/orders',$this->validFields(['items'=>['product_id'=>null,"quantity"=>1]]));
+
+        $response->assertSessionHasErrors();
+
+    }
+
+    public function testToCreateNewOrderQuantityFieldIsRequired(){
+
+        $response = $this->post('api/orders',$this->validFields(['items'=>['product_id'=>1,'quantity'=>null]]));
+
+        $response->assertSessionHasErrors();
+
+    }
+
+    public function testUpdateOrderItemQuantity(){
 
         $response = $this->put('api/orders/' . $this->order->id,
             $this->validFields([
                 "items"=> [
                     [
                         "order_item_id" => $this->order->orderItems[0]->id,
-                        "quantity"=>5,
+                        "quantity"=>123,
                     ]
                 ]
             ]));
 
         $response->assertStatus(200);
+
+        $this->get('/api/orders/'.$this->order->id)
+            ->assertSee(123);
+
+    }
+
+    public function testUpdateOrderItemProductId(){
+        $response = $this->put('api/orders/' . $this->order->id,
+            $this->validFields([
+                "items"=> [
+                    [
+                        "order_item_id" => $this->order->orderItems[1]->id,
+                        "product_id" => $this->product[0]->id
+                    ]
+                ]
+            ]));
+
+        $response->assertStatus(200);
+
+        $this->get('/api/orders/'.$this->order->id)
+            ->assertSee($this->product[0]->code,$this->product[0]->id);
+
+    }
+
+    public function testToUpdateOrderRequiredFieldIsOrderItemId(){
+        $response = $this->put('api/orders/' . $this->order->id,
+            $this->validFields([
+                "items"=> [
+                    [
+                        "quantity" => "2"
+                    ]
+                ]
+            ]));
+
+        $response->assertSessionHasErrors('items*order_item_id');
 
     }
 
@@ -90,7 +140,7 @@ class OrderTest extends TestCase
             "customer_id" => $this->customer->id,
             "items" =>[
                 [
-                    "product_id" => 1,
+                    "product_id" => $this->product[0]->id,
                     "quantity" => 2
                 ],
             ]
