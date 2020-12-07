@@ -6,6 +6,7 @@ use App\Customer;
 use App\Repository\Interfaces\BaseRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use PhpParser\Node\Stmt\DeclareDeclare;
 
 class CustomerRepository implements BaseRepository
 {
@@ -26,14 +27,23 @@ class CustomerRepository implements BaseRepository
         return $this->customerModel->all();
     }
 
-    public function insert(array $attributes): ?Model
+    public function insert($customer): ?Model
     {
-        return $this->customerModel->create($attributes);
+        return $customer->save();
+
+//        $this->customerModel->first_name = $customer->getFirstName();
+//        $this->customerModel->last_name = $customer->getLastName();
+//
+//        $this->customerModel->save();
+//
+//        return $this->customerModel;
     }
 
-    public function update(int $id, array $attributes): ?bool
+    public function update(int $id, $attributes): ?bool
     {
-        return $this->customerModel->whereId($id)->update($attributes);
+        $customer = $this->customerModel->find($id);
+
+         $this->customerModel->whereId($id)->update($attributes);
     }
 
     public function delete(int $id): ?bool
