@@ -2,48 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Customer;
-use Illuminate\Http\Request;
+use App\Http\Requests\Customers\CreateCustomerRequest;
+use App\Http\Requests\Customers\UpdateCustomerRequest;
+use App\Http\Resources\CustomerCollection;
+use App\Http\Resources\CustomerResource;
+use App\Services\CustomerService;
 
 class CustomerController extends Controller
 {
+    private $customerService;
+
+    public function __construct(CustomerService $customerService)
+    {
+        $this->customerService = $customerService;
+    }
+
     public function getCustomer($id){
 
-        $customer = Customer::find($id);
+        $customer = $this->customerService->getCustomer($id);
+
         if ($customer)
-            return response($customer,200);
+            return response(new CustomerResource($customer),200);
 
         return response('Customer not found.',404);
     }
 
     public function getAllCustomers(){
 
-        $customers = Customer::all();
+        $customers = $this->customerService->getAllCustomers();
 
-        return response($customers,200);
+        return response(new CustomerCollection($customers),200);
     }
 
-    public function create(Request $request){
-        $this->validate($request,[
-            'first_name' => 'string|required',
-            'last_name' => 'string|required'
-        ]);
+    public function create(CreateCustomerRequest $request){
 
-        $customer = Customer::create($request->all());
+        $customer = $this->customerService->insert($request->all());
 
         if ($customer)
-            return response($customer,201);
+            return response(new CustomerResource($customer),201);
 
         return response('Customer is not created',422);
     }
 
-    public function update(Request $request,$id){
-        $this->validate($request,[
-            'first_name' => 'string|nullable',
-            'first_last' => 'string|nullable',
-        ]);
+    public function update(UpdateCustomerRequest $request,$id){
 
-        $customer = Customer::whereId($id)->update($request->all());
+        $customer = $this->customerService->update($id,$request->all());
 
         if ($customer)
             return response('Customer successfully updated',200);
@@ -52,7 +55,7 @@ class CustomerController extends Controller
     }
 
     public function delete($id){
-        $customer = Customer::destroy($id);
+        $customer = $this->customerService->delete($id);
 
         if ($customer)
             return response('Customer successfully deleted',200);
