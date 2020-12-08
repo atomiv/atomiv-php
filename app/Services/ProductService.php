@@ -8,35 +8,35 @@ use App\Repository\ProductRepository;
 
 class ProductService
 {
-    private $product;
+    private $productRepository;
 
     public function __construct(ProductRepository $product)
     {
-        $this->product = $product;
+        $this->productRepository = $product;
     }
 
     public function getProduct($id){
 
-       return $this->product->find($id);
+       return $this->productRepository->find($id);
     }
 
     public function getAllProducts(){
 
-        return $this->product->all();
+        return $this->productRepository->all();
     }
 
     public function save($attributes){
 
-        return $this->product->save($attributes);
+        return $this->productRepository->save($attributes);
     }
 
     public function update($attributes,$id){
 
-        return $this->product->update($attributes,$id);
+        return $this->productRepository->update($attributes,$id);
     }
 
     public function delete($id){
 
-        return $this->product->delete($id);
+        return $this->productRepository->delete($id);
     }
 }

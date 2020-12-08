@@ -10,34 +10,34 @@ use App\Repository\ProductRepository;
 
 class OrderService
 {
-    private $order;
-    private $orderItem;
-    private $product;
+    private $orderRepository;
+    private $orderItemRepository;
+    private $productRepository;
 
     public function __construct(OrderRepository $order,OrderItemRepository $orderItem,ProductRepository $product){
-        $this->order = $order;
-        $this->orderItem = $orderItem;
-        $this->product = $product;
+        $this->orderRepository = $order;
+        $this->orderItemRepository = $orderItem;
+        $this->productRepository = $product;
     }
 
     public function getOrder($id){
-        return $this->order->find($id);
+        return $this->orderRepository->find($id);
     }
 
     public function getAllOrders(){
-        return $this->order->all();
+        return $this->orderRepository->all();
 
     }
 
     public function save(array $attributes)
     {
-        $order = $this->order->save($attributes);
+        $order = $this->orderRepository->save($attributes);
 
         $attributes['order_id'] = $order->id;
 
         $items = [];
         foreach ($attributes['items'] as $attribute){
-            $product = $this->product->find($attribute['product_id']);
+            $product = $this->productRepository->find($attribute['product_id']);
 
             $items[] = [
                 'order_id' => $attributes['order_id'],
@@ -47,7 +47,7 @@ class OrderService
                 'quantity' => $attribute['quantity']
             ];
         }
-        $this->orderItem->saveMany($items);
+        $this->orderItemRepository->saveMany($items);
 
         return $order->load('orderItems');
     }
@@ -60,24 +60,24 @@ class OrderService
             unset($item['order_item_id']);
 
             if (key_exists('product_id',$item)){
-                $product = $this->product->find($item['product_id']);
+                $product = $this->productRepository->find($item['product_id']);
                 $item['product_code'] = $product->code;
                 $item['product_price'] = $product->unit_price;
             }
 
-            $order_items = $this->orderItem->update($order_item_id,$item);
+            $order_items = $this->orderItemRepository->update($order_item_id,$item);
         }
 
-        return $this->order->find($id);
+        return $this->orderRepository->find($id);
 
     }
 
     public function delete(int $id){
-        $order = $this->order->find($id);
+        $order = $this->orderRepository->find($id);
 
-        $this->orderItem->deleteMany($order->orderItems->pluck('id'));
+        $this->orderItemRepository->deleteMany($order->orderItems->pluck('id'));
 
-       return $this->order->delete($order->id);
+       return $this->orderRepository->delete($order->id);
 
 
     }
