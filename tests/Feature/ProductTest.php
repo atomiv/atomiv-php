@@ -9,6 +9,8 @@ use Tests\TestCase;
 
 class ProductTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $product;
 
     public function setUp(): void
@@ -20,12 +22,14 @@ class ProductTest extends TestCase
     }
 
     public function testListSingleProduct(){
+
         $response = $this->get('/api/products/'.$this->product->id);
 
         $response->assertStatus(200);
     }
 
     public function testListAllProducts(){
+
         $response = $this->get('/api/products');
 
         $response->assertStatus(200);
@@ -33,28 +37,42 @@ class ProductTest extends TestCase
 
     public function testCreateNewProduct(){
 
-        $response = $this->post('api/products',$this->product->toArray());
-
-        $this->get('/api/products/'.$this->product->id)->assertSee($this->product->code,$this->product->description);
+        $response = $this->post('api/products',$this->validFields());
 
         $response->assertStatus(201);
+
+        $this->get('/api/products/'. $response["id"])
+            ->assertSee($this->validFields()["code"],$this->validFields()["description"]);
+
     }
 
     public function testUpdateProduct(){
-        $response = $this->put('api/products/' . $this->product->id,['code' => '123456']);
+
+        $response = $this->put('api/products/' . $this->product->id,["description" => "New description"]);
 
         $response->assertStatus(200);
 
-        $this->get('/api/products/'.$this->product->id)->assertSee('123456');
+        $this->get('/api/products/'. $this->product->id)->assertSee('New description');
 
     }
 
     public function testDeleteProduct(){
+
         $response = $this->delete('api/products/' . $this->product->id);
 
         $response->assertStatus(200);
 
         $this->get('/api/products/'.$this->product->id)->assertSee(null);
+
+    }
+
+    protected function validFields($overrides = []){
+
+        return array_merge([
+            "code" => "CODE123",
+            "description" => "This is description.",
+            "unit_price" => "5.20"
+        ],$overrides);
 
     }
 }

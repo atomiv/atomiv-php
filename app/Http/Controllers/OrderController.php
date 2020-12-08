@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Orders\CreateOrderRequest;
-use App\Http\Requests\Products\UpdateProductRequest;
+use App\Http\Requests\Orders\UpdateOrderRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
 use App\Services\OrderService;
-use App\Order;
+
 class OrderController extends Controller
 {
     private $orderService;
@@ -45,9 +45,9 @@ class OrderController extends Controller
 
     }
 
-    public function update(UpdateProductRequest $request, $id){
+    public function update(UpdateOrderRequest $request, $id){
 
-        $order = $this->orderService->update($id,$request->orderItems);
+        $order = $this->orderService->update($id,$request->items);
 
         if ($order)
             return response(['message'=>'Order successfully updated','order' => new OrderResource($order)],200);
