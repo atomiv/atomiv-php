@@ -26,7 +26,7 @@ class CustomerRepository implements BaseRepository
         return $this->customerModel->all();
     }
 
-    public function save(array $attributes): ?Model
+    public function insert(array $attributes): ?Model
     {
         return $this->customerModel->create($attributes);
     }

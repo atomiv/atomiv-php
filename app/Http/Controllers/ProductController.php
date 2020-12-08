@@ -36,7 +36,7 @@ class ProductController extends Controller
 
     public function create(CreateProductRequest $request){
 
-        $product = $this->productService->save($request->all());
+        $product = $this->productService->insert($request->all());
 
         if ($product)
             return response(new ProductResource($product),201);

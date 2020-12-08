@@ -10,7 +10,7 @@ interface BaseRepository
 {
     public function find(int $id): ?Model;
     public function all(): ?Collection;
-    public function save(array $attributes): ?Model;
+    public function insert(array $attributes): ?Model;
     public function update(int $id,array $attributes): ?bool;
     public function delete(int $id): ?bool;
 }

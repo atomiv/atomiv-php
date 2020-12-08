@@ -36,7 +36,7 @@ class CustomerController extends Controller
 
     public function create(CreateCustomerRequest $request){
 
-        $customer = $this->customerService->save($request->all());
+        $customer = $this->customerService->insert($request->all());
 
         if ($customer)
             return response(new CustomerResource($customer),201);

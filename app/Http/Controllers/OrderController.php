@@ -36,7 +36,7 @@ class OrderController extends Controller
 
     public function create(CreateOrderRequest $request){
 
-        $order = $this->orderService->save($request->all());
+        $order = $this->orderService->insert($request->all());
 
         if ($order)
             return response(['message' => 'Order successfully created','order' => new OrderResource($order)],201);

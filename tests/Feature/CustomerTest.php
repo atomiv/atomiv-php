@@ -36,7 +36,20 @@ class CustomerTest extends TestCase
 
         $response = $this->post('api/customers',$this->customer->toArray());
 
+        $this->get('api/customers/' . $this->customer->id)->assertSee($this->customer->first_name,$this->customer->last_name);
+
         $response->assertStatus(201);
+    }
+
+    public function testCustomerFirstNameRequired(){
+         $this->post('api/customers',['first_name'=> null])
+                ->assertSessionHasErrors('first_name');
+
+    }
+    public function testCustomerLastNameRequired(){
+        $this->post('api/customers',['last_name'=> null])
+            ->assertSessionHasErrors('last_name');
+
     }
 
     public function testUpdateCustomer(){
@@ -44,7 +57,7 @@ class CustomerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas('customers',['id' => $this->customer->id,'first_name'=> 'John']);
+        $this->get('api/customers/' . $this->customer->id)->assertSee('John');
     }
 
     public function testDeleteCustomer(){
@@ -52,7 +65,7 @@ class CustomerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('customers',['id'=>$this->customer->id]);
+        $this->get('api/customers/' . $this->customer->id)->assertSee(null);
 
     }
 }

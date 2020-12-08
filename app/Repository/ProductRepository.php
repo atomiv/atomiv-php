@@ -26,7 +26,7 @@ class ProductRepository implements BaseRepository
         return $this->productModel->all();
     }
 
-    public function save(array $attributes): ?Model
+    public function insert(array $attributes): ?Model
     {
         return $this->productModel->create($attributes);
     }
