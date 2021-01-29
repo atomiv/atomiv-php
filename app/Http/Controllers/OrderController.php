@@ -39,7 +39,7 @@ class OrderController extends Controller
         $order = $this->orderService->insert($request->all());
 
         if ($order)
-            return response(['message' => 'Order successfully created','order' => new OrderResource($order)],201);
+            return response(new OrderResource($order),201);
 
         return response('The order is not created',422);
 
@@ -50,7 +50,7 @@ class OrderController extends Controller
         $order = $this->orderService->update($id,$request->items);
 
         if ($order)
-            return response(['message'=>'Order successfully updated','order' => new OrderResource($order)],200);
+            return response(new OrderResource($order),200);
 
         return response('The order is not updated',422);
 
