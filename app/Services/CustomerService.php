@@ -38,8 +38,7 @@ class CustomerService
         return $this->customerRepository->insert($customer);
     }
 
-    public function update($id,UpdateCustomerRequestDto $customer){
-
+    public function update($id,$customer){
         return $this->customerRepository->update($id,$customer);
     }
 

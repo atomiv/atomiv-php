@@ -13,7 +13,14 @@ class UpdateCustomerRequestDto extends AbstractDto
     {
         $this->first_name = $data['first_name'] ?? null;
         $this->last_name = $data['last_name'] ?? null;
+    }
 
+    public function getFirstName(){
+        return $this->first_name;
+    }
+
+    public function getLastName(){
+        return $this->last_name;
     }
 
 }

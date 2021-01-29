@@ -8,11 +8,11 @@ use App\OrderItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItemRepository implements BaseRepository
+class OrderItemRepository
 {
     private $orderItemModel;
 
-    public function __construct(OrderItem $orderItemModel, ProductRepository $productRepo)
+    public function __construct(OrderItem $orderItemModel)
     {
         $this->orderItemModel = $orderItemModel;
     }
@@ -27,14 +27,14 @@ class OrderItemRepository implements BaseRepository
         // TODO: Implement all() method.
     }
 
-    public function insert(array $attributes): ?Model
+    public function insert(array $orderItem): ?Model
     {
         // TODO: Implement save() method.
     }
 
-    public function update(int $id, array $attributes): ?bool
+    public function update(int $id, array $orderItem): ?bool
     {
-       return $this->orderItemModel->whereId($id)->update($attributes);
+       return $this->orderItemModel->whereId($id)->update($orderItem);
     }
 
     public function delete(int $id): ?bool
@@ -42,9 +42,9 @@ class OrderItemRepository implements BaseRepository
         return $this->orderItemModel->destroy($id);
     }
 
-    public function insertMany(array $attributes): ?bool{
+    public function insertMany(array $orderItem): ?bool{
 
-        return $this->orderItemModel->insert($attributes);
+        return $this->orderItemModel->insert($orderItem);
     }
 
     public function deleteMany($ids): ?bool

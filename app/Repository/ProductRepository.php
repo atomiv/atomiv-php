@@ -8,7 +8,7 @@ use App\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductRepository implements BaseRepository
+class ProductRepository
 {
     private $productModel;
 
@@ -26,14 +26,16 @@ class ProductRepository implements BaseRepository
         return $this->productModel->all();
     }
 
-    public function insert(array $attributes): ?Model
+    public function insert($product): ?Model
     {
-        return $this->productModel->create($attributes);
+        $product->save();
+
+        return $product;
     }
 
-    public function update(int $id, array $attributes): ?bool
+    public function update(int $id, array $product): ?bool
     {
-        return $this->productModel->whereId($id)->update($attributes);
+        return $this->productModel->whereId($id)->update($product);
     }
 
     public function delete(int $id): ?bool

@@ -4,7 +4,9 @@
 namespace App\Services;
 
 
+use App\Product;
 use App\Repository\ProductRepository;
+use App\Services\Dto\CreateProductRequestDto;
 
 class ProductService
 {
@@ -25,9 +27,14 @@ class ProductService
         return $this->productRepository->all();
     }
 
-    public function insert($attributes){
+    public function insert(CreateProductRequestDto $request){
+        $product = new Product();
 
-        return $this->productRepository->insert($attributes);
+        $product->code = $request->getCode();
+        $product->description = $request->getDescription();
+        $product->unit_price = $request->getUnitPrice();
+
+        return $this->productRepository->insert($product);
     }
 
     public function update($attributes,$id){

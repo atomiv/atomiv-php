@@ -4,9 +4,12 @@
 namespace App\Services;
 
 
+use App\Order;
 use App\Repository\OrderItemRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
+use App\Services\Dto\CreateOrderRequestDto;
+use Carbon\Carbon;
 
 class OrderService
 {
@@ -29,9 +32,13 @@ class OrderService
 
     }
 
-    public function insert(array $attributes)
+    public function insert($attributes)
     {
-        $order = $this->orderRepository->insert($attributes);
+        $order = new Order();
+        $order->order_date = Carbon::now();
+        $order->customer_id = $attributes['customer_id'];
+
+        $order = $this->orderRepository->insert($order);
 
         $attributes['order_id'] = $order->id;
 

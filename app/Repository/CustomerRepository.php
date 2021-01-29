@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use PhpParser\Node\Stmt\DeclareDeclare;
 
-class CustomerRepository implements BaseRepository
+class CustomerRepository
 {
     private $customerModel;
 
@@ -29,21 +29,15 @@ class CustomerRepository implements BaseRepository
 
     public function insert($customer): ?Model
     {
-        return $customer->save();
+        $customer->save();
 
-//        $this->customerModel->first_name = $customer->getFirstName();
-//        $this->customerModel->last_name = $customer->getLastName();
-//
-//        $this->customerModel->save();
-//
-//        return $this->customerModel;
+        return $customer;
     }
 
-    public function update(int $id, $attributes): ?bool
+    public function update(int $id, $customer): ?bool
     {
-        $customer = $this->customerModel->find($id);
+       return $this->customerModel->whereId($id)->update($customer);
 
-         $this->customerModel->whereId($id)->update($attributes);
     }
 
     public function delete(int $id): ?bool
