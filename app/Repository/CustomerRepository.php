@@ -3,10 +3,8 @@
 namespace App\Repository;
 
 use App\Customer;
-use App\Repository\Interfaces\BaseRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use PhpParser\Node\Stmt\DeclareDeclare;
 
 class CustomerRepository
 {
@@ -34,10 +32,11 @@ class CustomerRepository
         return $customer;
     }
 
-    public function update(int $id, $customer): ?bool
+    public function update($customer): ?Model
     {
-       return $this->customerModel->whereId($id)->update($customer);
+        $customer->save();
 
+        return $customer;
     }
 
     public function delete(int $id): ?bool

@@ -3,7 +3,6 @@
 
 namespace App\Repository;
 
-use App\Repository\Interfaces\BaseRepository;
 use App\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -33,9 +32,11 @@ class ProductRepository
         return $product;
     }
 
-    public function update(int $id, array $product): ?bool
+    public function update($product): ?Model
     {
-        return $this->productModel->whereId($id)->update($product);
+       $product->save();
+
+       return $product;
     }
 
     public function delete(int $id): ?bool

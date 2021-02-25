@@ -3,9 +3,7 @@
 
 namespace App\Repository;
 
-use App\Repository\Interfaces\BaseRepository;
 use App\OrderItem;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderItemRepository
@@ -22,29 +20,23 @@ class OrderItemRepository
         return $this->orderItemModel->find($id);
     }
 
-    public function all(): ?Collection
+    public function insert($orderItem): ?Model
     {
-        // TODO: Implement all() method.
+       $orderItem->save();
+
+       return $orderItem;
     }
 
-    public function insert(array $orderItem): ?Model
+    public function update($orderItem): ?Model
     {
-        // TODO: Implement save() method.
-    }
+        $orderItem->save();
 
-    public function update(int $id, array $orderItem): ?bool
-    {
-       return $this->orderItemModel->whereId($id)->update($orderItem);
+        return $orderItem;
     }
 
     public function delete(int $id): ?bool
     {
         return $this->orderItemModel->destroy($id);
-    }
-
-    public function insertMany(array $orderItem): ?bool{
-
-        return $this->orderItemModel->insert($orderItem);
     }
 
     public function deleteMany($ids): ?bool
