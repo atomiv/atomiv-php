@@ -48,7 +48,7 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request,$id){
 
-        $customer = $this->customerService->update($id,$request->all());
+        $customer = $this->customerService->update($id,new UpdateCustomerRequestDto($request->all()));
 
         if ($customer)
             return response('Customer successfully updated',200);
