@@ -24,8 +24,8 @@ class UpdateCustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'regex:/^[\pL\s]+$/u|max:32',
-            'last_name' => 'regex:/^[\pL\s]+$/u|max:32'
+            'first_name' => 'regex:/^[\pL\s]+$/u|max:32|required',
+            'last_name' => 'regex:/^[\pL\s]+$/u|max:32|required'
         ];
     }
 }
