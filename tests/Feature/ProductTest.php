@@ -46,7 +46,7 @@ class ProductTest extends TestCase
 
     public function testUpdateProduct(){
 
-        $response = $this->put('api/products/' . $this->product['id'],["description" => "New description"]);
+        $response = $this->put('api/products/' . $this->product['id'],["description" => "New description",'code'=>'new123','unit_price'=>12.3]);
 
         $response->assertStatus(200);
 

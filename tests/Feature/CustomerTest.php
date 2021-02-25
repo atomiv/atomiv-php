@@ -70,12 +70,11 @@ class CustomerTest extends TestCase
     }
 
     public function testUpdateCustomer(){
-
-        $response = $this->put('api/customers/' . $this->customer['id'],['first_name' => 'John']);
+        $response = $this->put('api/customers/' . $this->customer['id'],['first_name' => 'Jack','last_name'=>'Jackson']);
 
         $response->assertStatus(200);
 
-        $this->get('api/customers/' . $this->customer['id'])->assertSee('John');
+        $this->get('api/customers/' . $this->customer['id'])->assertSee('Jack');
 
     }
 

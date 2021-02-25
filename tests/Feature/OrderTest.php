@@ -2,10 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Customer;
-use App\Order;
-use App\OrderItem;
-use App\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -43,6 +39,7 @@ class OrderTest extends TestCase
     }
 
     public function testCreateNewOrderWithOrderItems(){
+        $this->withoutExceptionHandling();
         $response = $this->post('api/orders',$this->validFields());
 
         $response->assertStatus(201);
@@ -68,14 +65,15 @@ class OrderTest extends TestCase
 
     }
 
-    public function testUpdateOrderItemQuantity(){
-
+    public function testUpdateOrderItems(){
+        $this->withoutExceptionHandling();
         $response = $this->put('api/orders/' . $this->order['id'],
             $this->validFields([
                 "items"=> [
                     [
+                        "product_id" => $this->product['id'],
                         "order_item_id" => $this->order['orderItems'][0]['id'],
-                        "quantity"=>123,
+                        "quantity"=>3,
                     ]
                 ]
             ]));
@@ -84,24 +82,6 @@ class OrderTest extends TestCase
 
         $this->get('/api/orders/'.$this->order['id'])
             ->assertSee(123);
-
-    }
-
-    public function testUpdateOrderItemProductId(){
-        $response = $this->put('api/orders/' . $this->order['id'],
-            $this->validFields([
-                "items"=> [
-                    [
-                        "order_item_id" => $this->order['orderItems'][0]['id'],
-                        "product_id" => $this->product['id']
-                    ]
-                ]
-            ]));
-
-        $response->assertStatus(200);
-
-        $this->get('/api/orders/'.$this->order['id'])
-            ->assertSee($this->product['code'],$this->product['id']);
 
     }
 
