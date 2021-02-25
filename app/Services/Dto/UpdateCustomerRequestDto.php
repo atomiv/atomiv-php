@@ -11,8 +11,8 @@ class UpdateCustomerRequestDto extends AbstractDto
 
     protected function map(array $data): void
     {
-        $this->first_name = $data['first_name'] ?? null;
-        $this->last_name = $data['last_name'] ?? null;
+        $this->first_name = $data['first_name'];
+        $this->last_name = $data['last_name'];
     }
 
     public function getFirstName(){
