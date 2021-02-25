@@ -5,14 +5,15 @@ namespace App\Services;
 
 
 use App\Product;
-use App\Repository\ProductRepository;
+use App\Repository\Interfaces\ProductRepositoryInterface;
 use App\Services\Dto\CreateProductRequestDto;
+use App\Services\Dto\UpdateProductRequestDto;
 
 class ProductService
 {
     private $productRepository;
 
-    public function __construct(ProductRepository $product)
+    public function __construct(ProductRepositoryInterface $product)
     {
         $this->productRepository = $product;
     }
@@ -37,9 +38,14 @@ class ProductService
         return $this->productRepository->insert($product);
     }
 
-    public function update($attributes,$id){
+    public function update($id, UpdateProductRequestDto $request){
+        $product = $this->productRepository->find($id);
 
-        return $this->productRepository->update($attributes,$id);
+        $product->code = $request->getCode();
+        $product->description = $request->getDescription();
+        $product->unit_price = $request->getUnitPrice();
+
+        return $this->productRepository->update($product);
     }
 
     public function delete($id){

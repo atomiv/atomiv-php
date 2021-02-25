@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-
 use App\Customer;
 use App\Repository\CustomerRepository;
 use App\Services\Dto\CreateCustomerRequestDto;
@@ -38,8 +37,15 @@ class CustomerService
         return $this->customerRepository->insert($customer);
     }
 
-    public function update($id,$customer){
-        return $this->customerRepository->update($id,$customer);
+    public function update($id,UpdateCustomerRequestDto $request){
+        $customer = $this->customerRepository->find($id);
+
+        $customer->first_name = $request->getFirstName();
+        $customer->last_name = $request->getLastName();
+
+        $this->customerRepository->update($customer);
+
+        return $customer;
     }
 
     public function delete($id){
