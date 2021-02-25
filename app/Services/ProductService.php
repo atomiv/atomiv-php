@@ -5,7 +5,7 @@ namespace App\Services;
 
 
 use App\Product;
-use App\Repository\Interfaces\ProductRepositoryInterface;
+use App\Repository\ProductRepository;
 use App\Services\Dto\CreateProductRequestDto;
 use App\Services\Dto\UpdateProductRequestDto;
 
@@ -13,7 +13,7 @@ class ProductService
 {
     private $productRepository;
 
-    public function __construct(ProductRepositoryInterface $product)
+    public function __construct(ProductRepository $product)
     {
         $this->productRepository = $product;
     }
