@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\Products\CreateProductRequest;
-use App\Http\Requests\Products\UpdateProductRequest;
+use App\Http\Requests\Products\CreateProductFormRequest;
+use App\Http\Requests\Products\UpdateProductFormRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Services\Dto\CreateProductRequestDto;
@@ -36,7 +36,7 @@ class ProductController extends Controller
         return response(new ProductCollection($products),200);
     }
 
-    public function create(CreateProductRequest $request){
+    public function create(CreateProductFormRequest $request){
 
         $product = $this->productService->insert(new CreateProductRequestDto($request->all()));
 
@@ -46,7 +46,7 @@ class ProductController extends Controller
         return response('The product is not created',422);
     }
 
-    public function update(UpdateProductRequest $request, $id){
+    public function update(UpdateProductFormRequest $request, $id){
 
         $product = $this->productService->update($id,new UpdateProductRequestDto($request->all()));
 

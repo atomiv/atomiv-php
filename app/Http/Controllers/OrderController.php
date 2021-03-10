@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Orders\CreateOrderRequest;
-use App\Http\Requests\Orders\UpdateOrderRequest;
+use App\Http\Requests\Orders\CreateOrderFormRequest;
+use App\Http\Requests\Orders\UpdateOrderFormRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
 use App\Services\Dto\CreateOrderRequestDto;
@@ -36,7 +36,7 @@ class OrderController extends Controller
         return response(new OrderCollection($orders),200);
     }
 
-    public function create(CreateOrderRequest $request){
+    public function create(CreateOrderFormRequest $request){
 
         $order = $this->orderService->insert(new CreateOrderRequestDto($request->all()));
 
@@ -47,7 +47,7 @@ class OrderController extends Controller
 
     }
 
-    public function update(UpdateOrderRequest $request, $id){
+    public function update(UpdateOrderFormRequest $request, $id){
 
         $order = $this->orderService->update($id,new UpdateOrderRequestDto($request->items));
 
