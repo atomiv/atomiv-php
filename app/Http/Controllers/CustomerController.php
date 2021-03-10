@@ -7,6 +7,8 @@ use App\Http\Requests\Customers\UpdateCustomerRequest;
 use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
 use App\Services\CustomerService;
+use App\Services\Dto\CreateCustomerRequestDto;
+use App\Services\Dto\UpdateCustomerRequestDto;
 
 class CustomerController extends Controller
 {
@@ -36,7 +38,7 @@ class CustomerController extends Controller
 
     public function create(CreateCustomerRequest $request){
 
-        $customer = $this->customerService->insert($request->all());
+        $customer = $this->customerService->insert(new CreateCustomerRequestDto($request->all()));
 
         if ($customer)
             return response(new CustomerResource($customer),201);
@@ -46,7 +48,7 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request,$id){
 
-        $customer = $this->customerService->update($id,$request->all());
+        $customer = $this->customerService->update($id,new UpdateCustomerRequestDto($request->all()));
 
         if ($customer)
             return response('Customer successfully updated',200);

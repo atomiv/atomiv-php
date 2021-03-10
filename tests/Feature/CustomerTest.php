@@ -2,10 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Customer;
-use Facade\Ignition\SolutionProviders\DefaultDbNameSolutionProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CustomerTest extends TestCase
@@ -18,13 +15,12 @@ class CustomerTest extends TestCase
     {
         parent::setUp();
 
-        $this->customer = factory(Customer::class)->create();
+        $this->customer = $this->post('api/customers',$this->validFields());
     }
-
 
     public function testListSingleCustomer(){
 
-        $response = $this->get('/api/customers/'.$this->customer->id);
+        $response = $this->get('/api/customers/'.$this->customer['id']);
 
         $response->assertStatus(200);
 
@@ -74,29 +70,28 @@ class CustomerTest extends TestCase
     }
 
     public function testUpdateCustomer(){
-
-        $response = $this->put('api/customers/' . $this->customer->id,['first_name' => 'John']);
+        $response = $this->put('api/customers/' . $this->customer['id'],['first_name' => 'Jack','last_name'=>'Jackson']);
 
         $response->assertStatus(200);
 
-        $this->get('api/customers/' . $this->customer->id)->assertSee('John');
+        $this->get('api/customers/' . $this->customer['id'])->assertSee('Jack');
 
     }
 
     public function testDeleteCustomer(){
 
-        $response = $this->delete('api/customers/' . $this->customer->id);
+        $response = $this->delete('api/customers/' . $this->customer['id']);
 
         $response->assertStatus(200);
 
-        $this->get('api/customers/' . $this->customer->id)->assertSee(null);
+        $this->get('api/customers/' . $this->customer['id'])->assertSee(null);
 
     }
 
     protected function validFields($overrides = []){
 
         return array_merge([
-            'first_name' => "John",
+            "first_name" => "John",
             "last_name" => "Doe"
         ],$overrides);
     }

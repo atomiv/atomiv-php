@@ -6,6 +6,8 @@ use App\Http\Requests\Orders\CreateOrderRequest;
 use App\Http\Requests\Orders\UpdateOrderRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
+use App\Services\Dto\CreateOrderRequestDto;
+use App\Services\Dto\UpdateOrderRequestDto;
 use App\Services\OrderService;
 
 class OrderController extends Controller
@@ -36,10 +38,10 @@ class OrderController extends Controller
 
     public function create(CreateOrderRequest $request){
 
-        $order = $this->orderService->insert($request->all());
+        $order = $this->orderService->insert(new CreateOrderRequestDto($request->all()));
 
         if ($order)
-            return response(['message' => 'Order successfully created','order' => new OrderResource($order)],201);
+            return response(new OrderResource($order),201);
 
         return response('The order is not created',422);
 
@@ -47,10 +49,10 @@ class OrderController extends Controller
 
     public function update(UpdateOrderRequest $request, $id){
 
-        $order = $this->orderService->update($id,$request->items);
+        $order = $this->orderService->update($id,new UpdateOrderRequestDto($request->items));
 
         if ($order)
-            return response(['message'=>'Order successfully updated','order' => new OrderResource($order)],200);
+            return response(new OrderResource($order),200);
 
         return response('The order is not updated',422);
 

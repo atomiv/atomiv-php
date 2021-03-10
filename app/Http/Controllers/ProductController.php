@@ -7,6 +7,8 @@ use App\Http\Requests\Products\CreateProductRequest;
 use App\Http\Requests\Products\UpdateProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
+use App\Services\Dto\CreateProductRequestDto;
+use App\Services\Dto\UpdateProductRequestDto;
 use App\Services\ProductService;
 
 class ProductController extends Controller
@@ -36,7 +38,7 @@ class ProductController extends Controller
 
     public function create(CreateProductRequest $request){
 
-        $product = $this->productService->insert($request->all());
+        $product = $this->productService->insert(new CreateProductRequestDto($request->all()));
 
         if ($product)
             return response(new ProductResource($product),201);
@@ -46,14 +48,16 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, $id){
 
-        $product = $this->productService->update($id,$request->all());
+        $product = $this->productService->update($id,new UpdateProductRequestDto($request->all()));
 
         if ($product)
             return response('Product successfully updated',200);
 
         return response('The product is not updated',422);
     }
+
     public function delete($id){
+
         $product = $this->productService->delete($id);
 
         if ($product)

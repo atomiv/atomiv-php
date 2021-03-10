@@ -2,12 +2,11 @@
 
 namespace App\Repository;
 
-use App\Repository\Interfaces\BaseRepository;
 use App\Order;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderRepository implements BaseRepository
+class OrderRepository
 {
     private $orderModel;
 
@@ -26,13 +25,14 @@ class OrderRepository implements BaseRepository
       return $this->orderModel->with('orderItems')->get();
     }
 
-    public function insert(array $attributes): ?Model
+    public function insert($order): ?Model
     {
-       return $this->orderModel->create(['customer_id'=>$attributes['customer_id'],'order_date'=>now()]);
+       $order->save();
 
+       return $order;
     }
 
-    public function update(int $id, array $attributes): ?bool
+    public function update(int $id, array $order): ?bool
     {
         // TODO: Implement update() method.
     }

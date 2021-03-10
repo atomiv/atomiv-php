@@ -2,10 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Customer;
-use App\Order;
-use App\OrderItem;
-use App\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -21,21 +17,16 @@ class OrderTest extends TestCase
     {
         parent::setUp();
 
-        $this->product = factory(Product::class,5)->create();
+        $this->product = $this->post('api/products',[ 'code' => '1234', 'description' => 'Test','unit_price'=>'2']);
 
-        $this->customer = factory(Customer::class)->create();
+        $this->customer = $this->post('api/customers',[ 'first_name' => 'John', 'last_name' => 'Doe']);
 
-        $this->order = factory(Order::class)->create(['customer_id' => $this->customer->id]);
-
-        $this->order->orderItems()->createMany(
-            factory(OrderItem::class, 3)->make()->toArray()
-        );
+        $this->order = $this->post('api/orders',$this->validFields());
 
     }
 
     public function testListSingleOrder(){
-
-        $response = $this->get('/api/orders/'.$this->order->id);
+        $response = $this->get('/api/orders/'.$this->order['id']);
 
         $response->assertStatus(200);
     }
@@ -48,13 +39,13 @@ class OrderTest extends TestCase
     }
 
     public function testCreateNewOrderWithOrderItems(){
-
+        $this->withoutExceptionHandling();
         $response = $this->post('api/orders',$this->validFields());
 
         $response->assertStatus(201);
 
 
-        $this->get('/api/orders/'. $response["order"]["id"])
+        $this->get('/api/orders/'. $response["id"])
             ->assertStatus(200);
 
     }
@@ -68,51 +59,34 @@ class OrderTest extends TestCase
 
     public function testToCreateNewOrderQuantityFieldIsRequired(){
 
-        $response = $this->post('api/orders',$this->validFields(['items'=>['product_id'=>1,'quantity'=>null]]));
+        $response = $this->post('api/orders',$this->validFields(['items'=>['product_id'=>$this->product['id'],'quantity'=>null]]));
 
         $response->assertSessionHasErrors();
 
     }
 
-    public function testUpdateOrderItemQuantity(){
-
-        $response = $this->put('api/orders/' . $this->order->id,
+    public function testUpdateOrderItems(){
+        $this->withoutExceptionHandling();
+        $response = $this->put('api/orders/' . $this->order['id'],
             $this->validFields([
                 "items"=> [
                     [
-                        "order_item_id" => $this->order->orderItems[0]->id,
-                        "quantity"=>123,
+                        "product_id" => $this->product['id'],
+                        "order_item_id" => $this->order['orderItems'][0]['id'],
+                        "quantity"=>3,
                     ]
                 ]
             ]));
 
         $response->assertStatus(200);
 
-        $this->get('/api/orders/'.$this->order->id)
+        $this->get('/api/orders/'.$this->order['id'])
             ->assertSee(123);
 
     }
 
-    public function testUpdateOrderItemProductId(){
-        $response = $this->put('api/orders/' . $this->order->id,
-            $this->validFields([
-                "items"=> [
-                    [
-                        "order_item_id" => $this->order->orderItems[1]->id,
-                        "product_id" => $this->product[0]->id
-                    ]
-                ]
-            ]));
-
-        $response->assertStatus(200);
-
-        $this->get('/api/orders/'.$this->order->id)
-            ->assertSee($this->product[0]->code,$this->product[0]->id);
-
-    }
-
     public function testToUpdateOrderRequiredFieldIsOrderItemId(){
-        $response = $this->put('api/orders/' . $this->order->id,
+        $response = $this->put('api/orders/' . $this->order['id'],
             $this->validFields([
                 "items"=> [
                     [
@@ -127,20 +101,20 @@ class OrderTest extends TestCase
 
     public function testDeleteOrderWithItems()
     {
-        $response = $this->delete('api/products/' . $this->order->id);
+        $response = $this->delete('api/products/' . $this->order['id']);
 
         $response->assertStatus(200);
 
-        $this->get('/api/orders/'.$this->order->id)->assertSee(null);
+        $this->get('/api/orders/'.$this->order['id'])->assertSee(null);
     }
 
     protected function validFields($overrides = []){
 
         return array_merge([
-            "customer_id" => $this->customer->id,
+            "customer_id" => $this->customer['id'],
             "items" =>[
                 [
-                    "product_id" => $this->product[0]->id,
+                    "product_id" => $this->product['id'],
                     "quantity" => 2
                 ],
             ]

@@ -2,9 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ProductTest extends TestCase
@@ -17,13 +15,13 @@ class ProductTest extends TestCase
     {
         parent::setUp();
 
-        $this->product = factory(Product::class)->create();
+        $this->product = $this->post('api/products',$this->validFields());
 
     }
 
     public function testListSingleProduct(){
 
-        $response = $this->get('/api/products/'.$this->product->id);
+        $response = $this->get('/api/products/'.$this->product['id']);
 
         $response->assertStatus(200);
     }
@@ -48,21 +46,21 @@ class ProductTest extends TestCase
 
     public function testUpdateProduct(){
 
-        $response = $this->put('api/products/' . $this->product->id,["description" => "New description"]);
+        $response = $this->put('api/products/' . $this->product['id'],["description" => "New description",'code'=>'new123','unit_price'=>12.3]);
 
         $response->assertStatus(200);
 
-        $this->get('/api/products/'. $this->product->id)->assertSee('New description');
+        $this->get('/api/products/'. $this->product['id'])->assertSee('New description');
 
     }
 
     public function testDeleteProduct(){
 
-        $response = $this->delete('api/products/' . $this->product->id);
+        $response = $this->delete('api/products/' . $this->product['id']);
 
         $response->assertStatus(200);
 
-        $this->get('/api/products/'.$this->product->id)->assertSee(null);
+        $this->get('/api/products/'.$this->product['id'])->assertSee(null);
 
     }
 

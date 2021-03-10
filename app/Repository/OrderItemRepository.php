@@ -3,16 +3,14 @@
 
 namespace App\Repository;
 
-use App\Repository\Interfaces\BaseRepository;
 use App\OrderItem;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItemRepository implements BaseRepository
+class OrderItemRepository
 {
     private $orderItemModel;
 
-    public function __construct(OrderItem $orderItemModel, ProductRepository $productRepo)
+    public function __construct(OrderItem $orderItemModel)
     {
         $this->orderItemModel = $orderItemModel;
     }
@@ -22,29 +20,23 @@ class OrderItemRepository implements BaseRepository
         return $this->orderItemModel->find($id);
     }
 
-    public function all(): ?Collection
+    public function insert($orderItem): ?Model
     {
-        // TODO: Implement all() method.
+       $orderItem->save();
+
+       return $orderItem;
     }
 
-    public function insert(array $attributes): ?Model
+    public function update($orderItem): ?Model
     {
-        // TODO: Implement save() method.
-    }
+        $orderItem->save();
 
-    public function update(int $id, array $attributes): ?bool
-    {
-       return $this->orderItemModel->whereId($id)->update($attributes);
+        return $orderItem;
     }
 
     public function delete(int $id): ?bool
     {
         return $this->orderItemModel->destroy($id);
-    }
-
-    public function insertMany(array $attributes): ?bool{
-
-        return $this->orderItemModel->insert($attributes);
     }
 
     public function deleteMany($ids): ?bool

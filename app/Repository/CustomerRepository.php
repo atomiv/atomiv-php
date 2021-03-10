@@ -3,11 +3,10 @@
 namespace App\Repository;
 
 use App\Customer;
-use App\Repository\Interfaces\BaseRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class CustomerRepository implements BaseRepository
+class CustomerRepository
 {
     private $customerModel;
 
@@ -26,14 +25,18 @@ class CustomerRepository implements BaseRepository
         return $this->customerModel->all();
     }
 
-    public function insert(array $attributes): ?Model
+    public function insert($customer): ?Model
     {
-        return $this->customerModel->create($attributes);
+        $customer->save();
+
+        return $customer;
     }
 
-    public function update(int $id, array $attributes): ?bool
+    public function update($customer): ?Model
     {
-        return $this->customerModel->whereId($id)->update($attributes);
+        $customer->save();
+
+        return $customer;
     }
 
     public function delete(int $id): ?bool

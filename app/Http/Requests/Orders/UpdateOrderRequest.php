@@ -25,8 +25,8 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'items.*.order_item_id' => 'integer|required',
-            'items.*.product_id' => 'integer',
-            'items.*.quantity' => 'integer'
+            'items.*.product_id' => 'integer|required',
+            'items.*.quantity' => 'integer|required'
         ];
     }
 }
