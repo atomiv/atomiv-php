@@ -3,10 +3,11 @@
 namespace App\Repository;
 
 use App\Order;
+use App\Repository\Interfaces\OrderRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderRepository
+class OrderRepository implements OrderRepositoryInterface
 {
     private $orderModel;
 
@@ -15,29 +16,24 @@ class OrderRepository
         $this->orderModel = $orderModel;
     }
 
-    public function find(int $id): ?Model
+    public function find(int $id): Model
     {
         return $this->orderModel->with('orderItems')->find($id);
     }
 
-    public function all(): ?Collection
+    public function all(): Collection
     {
       return $this->orderModel->with('orderItems')->get();
     }
 
-    public function insert($order): ?Model
+    public function insert($order): Model
     {
        $order->save();
 
        return $order;
     }
 
-    public function update(int $id, array $order): ?bool
-    {
-        // TODO: Implement update() method.
-    }
-
-    public function delete(int $id): ?bool
+    public function delete(int $id): bool
     {
         return $this->orderModel->destroy($id);
 
