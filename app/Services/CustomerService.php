@@ -7,8 +7,9 @@ use App\Customer;
 use App\Repository\CustomerRepository;
 use App\Services\Dto\CreateCustomerRequestDto;
 use App\Services\Dto\UpdateCustomerRequestDto;
+use App\Services\Interfaces\CustomerServiceInterface;
 
-class CustomerService
+class CustomerService implements CustomerServiceInterface
 {
 
     private $customerRepository;
@@ -18,7 +19,7 @@ class CustomerService
         $this->customerRepository = $customer;
     }
 
-    public function getCustomer($id){
+    public function getCustomer(int $id){
 
         return $this->customerRepository->find($id);
     }
@@ -37,7 +38,7 @@ class CustomerService
         return $this->customerRepository->insert($customer);
     }
 
-    public function update($id,UpdateCustomerRequestDto $request){
+    public function update(UpdateCustomerRequestDto $request,$id){
         $customer = $this->customerRepository->find($id);
 
         $customer->first_name = $request->getFirstName();
@@ -48,7 +49,7 @@ class CustomerService
         return $customer;
     }
 
-    public function delete($id){
+    public function delete(int $id){
 
         return $this->customerRepository->delete($id);
     }

@@ -8,8 +8,9 @@ use App\Product;
 use App\Repository\ProductRepository;
 use App\Services\Dto\CreateProductRequestDto;
 use App\Services\Dto\UpdateProductRequestDto;
+use App\Services\Interfaces\ProductServiceInterface;
 
-class ProductService
+class ProductService implements ProductServiceInterface
 {
     private $productRepository;
 
@@ -38,7 +39,7 @@ class ProductService
         return $this->productRepository->insert($product);
     }
 
-    public function update($id, UpdateProductRequestDto $request){
+    public function update(UpdateProductRequestDto $request, int $id){
         $product = $this->productRepository->find($id);
 
         $product->code = $request->getCode();
@@ -48,7 +49,7 @@ class ProductService
         return $this->productRepository->update($product);
     }
 
-    public function delete($id){
+    public function delete(int $id){
 
         return $this->productRepository->delete($id);
     }
