@@ -4,17 +4,10 @@
 namespace App\Services\Dto;
 
 
-class CreateOrderItemRequestDto extends AbstractDto
+class CreateOrderItemRequestDto
 {
     private $product_id;
     private $quantity;
-
-    protected function map(array $data): void
-    {
-       $this->product_id = $data['product_id'];
-       $this->quantity = $data['quantity'];
-
-    }
 
     public function getProductId(){
 

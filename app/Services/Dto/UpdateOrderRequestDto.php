@@ -4,14 +4,9 @@
 namespace App\Services\Dto;
 
 
-class UpdateOrderRequestDto extends AbstractDto
+class UpdateOrderRequestDto
 {
     private $order_items;
-
-    protected function map(array $data): void
-    {
-        $this->order_items = $this->setOrderItems($data);
-    }
 
     public function getOrderItems(){
         return $this->order_items;

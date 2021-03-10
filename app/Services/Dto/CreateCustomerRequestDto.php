@@ -3,19 +3,10 @@
 
 namespace App\Services\Dto;
 
-
-class CreateCustomerRequestDto extends AbstractDto
+class CreateCustomerRequestDto
 {
     private $first_name;
     private $last_name;
-
-
-    protected function map(array $data): void
-    {
-        $this->first_name = $data['first_name'];
-        $this->last_name = $data['last_name'];
-
-    }
 
     public function getFirstName(){
         return $this->first_name;
