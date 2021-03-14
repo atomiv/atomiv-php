@@ -38,7 +38,11 @@ class CustomerController extends Controller
 
     public function create(CreateCustomerFormRequest $request){
 
-        $customer = $this->customerService->insert(new CreateCustomerRequestDto($request->all()));
+        $requestDto = new CreateCustomerRequestDto();
+        $requestDto->setFirstName($request->first_name);
+        $requestDto->setLastName($request->last_name);
+
+        $customer = $this->customerService->insert($requestDto);
 
         if ($customer)
             return response(new CustomerResource($customer),201);
@@ -48,7 +52,11 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerFormRequest $request, $id){
 
-        $customer = $this->customerService->update($id,new UpdateCustomerRequestDto($request->all()));
+        $requestDto = new UpdateCustomerRequestDto();
+        $requestDto->setFirstName($request->first_name);
+        $requestDto->setLastName($request->last_name);
+
+        $customer = $this->customerService->update($requestDto,$id);
 
         if ($customer)
             return response('Customer successfully updated',200);

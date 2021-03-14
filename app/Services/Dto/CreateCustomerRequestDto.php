@@ -12,7 +12,15 @@ class CreateCustomerRequestDto
         return $this->first_name;
     }
 
+    public function setFirstName($firstName){
+        $this->first_name = $firstName;
+    }
+
     public function getLastName(){
         return $this->last_name;
+    }
+
+    public function setLastName($lastName){
+        $this->last_name = $lastName;
     }
 }

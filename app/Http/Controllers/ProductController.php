@@ -38,7 +38,12 @@ class ProductController extends Controller
 
     public function create(CreateProductFormRequest $request){
 
-        $product = $this->productService->insert(new CreateProductRequestDto($request->all()));
+        $requestDto = new CreateProductRequestDto();
+        $requestDto->setCode($request->code);
+        $requestDto->setDescription($request->description);
+        $requestDto->setUnitPrice($request->unit_price);
+
+        $product = $this->productService->insert($requestDto);
 
         if ($product)
             return response(new ProductResource($product),201);
@@ -48,7 +53,12 @@ class ProductController extends Controller
 
     public function update(UpdateProductFormRequest $request, $id){
 
-        $product = $this->productService->update($id,new UpdateProductRequestDto($request->all()));
+        $requestDto = new UpdateProductRequestDto();
+        $requestDto->setCode($request->code);
+        $requestDto->setDescription($request->description);
+        $requestDto->setUnitPrice($request->unit_price);
+
+        $product = $this->productService->update($requestDto,$id);
 
         if ($product)
             return response('Product successfully updated',200);
