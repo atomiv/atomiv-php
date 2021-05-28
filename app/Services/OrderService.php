@@ -11,8 +11,9 @@ use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Services\Dto\CreateOrderRequestDto;
 use App\Services\Dto\UpdateOrderRequestDto;
+use App\Services\Interfaces\OrderServiceInterface;
 
-class OrderService
+class OrderService implements OrderServiceInterface
 {
     private $orderRepository;
     private $orderItemRepository;
@@ -64,7 +65,7 @@ class OrderService
         return $order->load('orderItems');
     }
 
-    public function update(int $id,UpdateOrderRequestDto $request){
+    public function update(UpdateOrderRequestDto $request,int $id){
 
         foreach ($request->getOrderItems() as $item){
 
@@ -89,10 +90,8 @@ class OrderService
     public function delete(int $id){
         $order = $this->orderRepository->find($id);
 
-        $this->orderItemRepository->deleteMany($order->orderItems->pluck('id'));
-
        return $this->orderRepository->delete($order->id);
 
-
+       //TODO:Cascade delete
     }
 }

@@ -4,9 +4,10 @@
 namespace App\Repository;
 
 use App\OrderItem;
+use App\Repository\Interfaces\OrderitemRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItemRepository
+class OrderItemRepository implements OrderitemRepositoryInterface
 {
     private $orderItemModel;
 
@@ -15,33 +16,23 @@ class OrderItemRepository
         $this->orderItemModel = $orderItemModel;
     }
 
-    public function find(int $id): ?Model
+    public function find(int $id): Model
     {
         return $this->orderItemModel->find($id);
     }
 
-    public function insert($orderItem): ?Model
+    public function insert(OrderItem $orderItem): Model
     {
        $orderItem->save();
 
        return $orderItem;
     }
 
-    public function update($orderItem): ?Model
+    public function update(OrderItem $orderItem): Model
     {
         $orderItem->save();
 
         return $orderItem;
-    }
-
-    public function delete(int $id): ?bool
-    {
-        return $this->orderItemModel->destroy($id);
-    }
-
-    public function deleteMany($ids): ?bool
-    {
-        return $this->orderItemModel->destroy($ids);
     }
 
 }

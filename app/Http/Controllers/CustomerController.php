@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Customers\CreateCustomerRequest;
-use App\Http\Requests\Customers\UpdateCustomerRequest;
+use App\Http\Requests\Customers\CreateCustomerFormRequest;
+use App\Http\Requests\Customers\UpdateCustomerFormRequest;
 use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
 use App\Services\CustomerService;
@@ -36,9 +36,13 @@ class CustomerController extends Controller
         return response(new CustomerCollection($customers),200);
     }
 
-    public function create(CreateCustomerRequest $request){
+    public function create(CreateCustomerFormRequest $request){
 
-        $customer = $this->customerService->insert(new CreateCustomerRequestDto($request->all()));
+        $requestDto = new CreateCustomerRequestDto();
+        $requestDto->setFirstName($request->first_name);
+        $requestDto->setLastName($request->last_name);
+
+        $customer = $this->customerService->insert($requestDto);
 
         if ($customer)
             return response(new CustomerResource($customer),201);
@@ -46,9 +50,13 @@ class CustomerController extends Controller
         return response('Customer is not created',422);
     }
 
-    public function update(UpdateCustomerRequest $request,$id){
+    public function update(UpdateCustomerFormRequest $request, $id){
 
-        $customer = $this->customerService->update($id,new UpdateCustomerRequestDto($request->all()));
+        $requestDto = new UpdateCustomerRequestDto();
+        $requestDto->setFirstName($request->first_name);
+        $requestDto->setLastName($request->last_name);
+
+        $customer = $this->customerService->update($requestDto,$id);
 
         if ($customer)
             return response('Customer successfully updated',200);

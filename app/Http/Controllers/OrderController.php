@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Orders\CreateOrderRequest;
-use App\Http\Requests\Orders\UpdateOrderRequest;
+use App\Http\Requests\Orders\CreateOrderFormRequest;
+use App\Http\Requests\Orders\UpdateOrderFormRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
+use App\Services\Dto\CreateOrderItemRequestDto;
 use App\Services\Dto\CreateOrderRequestDto;
+use App\Services\Dto\UpdateOrderItemRequestDto;
 use App\Services\Dto\UpdateOrderRequestDto;
 use App\Services\OrderService;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -36,9 +39,22 @@ class OrderController extends Controller
         return response(new OrderCollection($orders),200);
     }
 
-    public function create(CreateOrderRequest $request){
+    public function create(CreateOrderFormRequest $request){
 
-        $order = $this->orderService->insert(new CreateOrderRequestDto($request->all()));
+        $requestDto = new CreateOrderRequestDto();
+        $requestDto->setCustomerId($request->customer_id);
+        $requestDto->setOrderDate(Carbon::now());
+
+        foreach ($request->items as $item){
+
+            $orderItemRequestDto = new CreateOrderItemRequestDto();
+            $orderItemRequestDto->setProductId($item['product_id']);
+            $orderItemRequestDto->setQuantity($item['quantity']);
+
+            $requestDto->setOrderItems($orderItemRequestDto);
+        }
+
+        $order = $this->orderService->insert($requestDto);
 
         if ($order)
             return response(new OrderResource($order),201);
@@ -47,9 +63,23 @@ class OrderController extends Controller
 
     }
 
-    public function update(UpdateOrderRequest $request, $id){
+    public function update(UpdateOrderFormRequest $request, $id){
 
-        $order = $this->orderService->update($id,new UpdateOrderRequestDto($request->items));
+        $requestDto = new UpdateOrderRequestDto();
+        $requestDto->setCustomerId($request->customer_id);
+        $requestDto->setOrderDate(Carbon::now());
+
+        foreach ($request->items as $item){
+
+            $orderItemRequestDto = new UpdateOrderItemRequestDto();
+            $orderItemRequestDto->setOrderItemId($item['order_item_id']);
+            $orderItemRequestDto->setProductId($item['product_id']);
+            $orderItemRequestDto->setQuantity($item['quantity']);
+
+            $requestDto->setOrderItems($orderItemRequestDto);
+        }
+
+        $order = $this->orderService->update($requestDto,$id);
 
         if ($order)
             return response(new OrderResource($order),200);
