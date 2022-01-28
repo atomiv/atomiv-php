@@ -32,10 +32,6 @@ class Product
      */
     private $unitPrice;
 
-    /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
-    private $createdAt;
 
     public function getId(){
         return $this->id;
