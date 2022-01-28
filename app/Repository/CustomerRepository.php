@@ -2,47 +2,62 @@
 
 namespace App\Repository;
 
-use App\Customer;
+use App\Entities\Customer;
 use App\Repository\Interfaces\CustomerRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Doctrine\ORM\EntityManager;
+
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
-    private $customerModel;
+    /**
+     * @var string
+     */
+    private $class = 'App\Entities\Customer';
 
-    public function __construct(Customer $customerModel)
+    /**
+     * @var EntityManager
+     */
+    private $em;
+
+    public function __construct(EntityManager $em)
     {
-        $this->customerModel = $customerModel;
+        $this->em = $em;
     }
 
-    public function find(int $id): Model
+    public function find(int $id): Customer
     {
-        return $this->customerModel->find($id);
+        return $this->em->getRepository($this->class)->find($id);
     }
 
-    public function all() : Collection
+    public function all()
     {
-        return $this->customerModel->all();
+        return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(Customer $customer): Model
+    public function insert(Customer $product): Customer
     {
-        $customer->save();
+        $this->em->persist($product);
+
+        $this->em->flush();
+
+        return $product;
+    }
+
+    public function update(Customer $customer): Customer
+    {
+        $this->em->persist($customer);
+
+        $this->em->flush();
 
         return $customer;
     }
 
-    public function update(Customer $customer) : Model
+    public function delete(Customer $customer): bool
     {
-        $customer->save();
+        $this->em->remove($customer);
 
-        return $customer;
+        $this->em->flush();
 
-    }
-
-    public function delete(int $id) : bool
-    {
-        return $this->customerModel->destroy($id);
+        return true;
     }
 }

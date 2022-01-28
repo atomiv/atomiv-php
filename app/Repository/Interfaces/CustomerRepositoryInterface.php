@@ -3,20 +3,18 @@
 
 namespace App\Repository\Interfaces;
 
-use App\Customer;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use App\Entities\Customer;
 
 interface CustomerRepositoryInterface
 {
-    public function find(int $id): Model;
+    public function find(int $id): Customer;
 
-    public function all(): Collection;
+    public function all();
 
-    public function insert(Customer $customer): Model;
+    public function insert(Customer $customer): Customer;
 
-    public function update(Customer $customer): ?Model;
+    public function update(Customer $customer): ?Customer;
 
-    public function delete(int $id): bool;
+    public function delete(Customer $customer): bool;
 
 }
