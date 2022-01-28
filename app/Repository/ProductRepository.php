@@ -24,7 +24,7 @@ class ProductRepository implements ProductRepositoryInterface
         $this->em = $em;
     }
 
-    public function find(int $id)
+    public function find(int $id): Product
     {
         return $this->em->getRepository($this->class)->find($id);
     }
@@ -34,7 +34,7 @@ class ProductRepository implements ProductRepositoryInterface
         return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(Product $product)
+    public function insert(Product $product): Product
     {
         $this->em->persist($product);
 
@@ -43,7 +43,7 @@ class ProductRepository implements ProductRepositoryInterface
         return $product;
     }
 
-    public function update(Product $product)
+    public function update(Product $product): Product
     {
         $this->em->persist($product);
 
