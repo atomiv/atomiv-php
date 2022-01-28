@@ -33,7 +33,35 @@ class Product
     private $unitPrice;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $createdAt;
+
+    public function getId(){
+        return $this->id;
+    }
+
+    public function setCode(string $code){
+        $this->code = $code;
+    }
+
+    public function getCode(){
+       return $this->code;
+    }
+
+    public function setDescription(string $description){
+        $this->description = $description;
+    }
+
+    public function getDescription(){
+        return $this->description;
+    }
+
+    public function setUnitPrice(float $unitPrice){
+        $this->unitPrice = $unitPrice;
+    }
+
+    public function getUnitPrice(){
+        return $this->unitPrice;
+    }
 }
