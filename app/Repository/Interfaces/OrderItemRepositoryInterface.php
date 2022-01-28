@@ -6,7 +6,7 @@ namespace App\Repository\Interfaces;
 use App\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 
-interface OrderitemRepositoryInterface
+interface OrderItemRepositoryInterface
 {
     public function find(int $id): Model;
 
