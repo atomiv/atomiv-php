@@ -3,46 +3,61 @@
 
 namespace App\Repository;
 
-use App\Product;
+use App\Entities\Product;
 use App\Repository\Interfaces\ProductRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Doctrine\ORM\EntityManager;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    private $productModel;
+    /**
+     * @var string
+     */
+    private $class = 'App\Entities\Product';
 
-    public function __construct(Product $productModel){
-        $this->productModel = $productModel;
+    /**
+     * @var EntityManager
+     */
+    private $em;
+
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
     }
 
-    public function find(int $id): Model
+    public function find(int $id)
     {
-       return $this->productModel->find($id);
+        return $this->em->getRepository($this->class)->find($id);
     }
 
-    public function all(): Collection
+    public function all()
     {
-        return $this->productModel->all();
+        return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(Product $product): Model
+    public function insert(Product $product)
     {
-        $product->save();
+        $this->em->persist($product);
+
+        $this->em->flush();
 
         return $product;
     }
 
-    public function update(Product $product): Model
+    public function update(Product $product)
     {
-       $product->save();
+        $this->em->persist($product);
 
-       return $product;
+        $this->em->flush();
+
+        return $product;
     }
 
-    public function delete(int $id): bool
+    public function delete(Product $product): bool
     {
-        return $this->productModel->destroy($id);
+        $this->em->remove($product);
+
+        $this->em->flush();
+        return true;
     }
 
 }
