@@ -34,13 +34,13 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(Customer $product): Customer
+    public function insert(Customer $customer): Customer
     {
-        $this->em->persist($product);
+        $this->em->persist($customer);
 
         $this->em->flush();
 
-        return $product;
+        return $customer;
     }
 
     public function update(Customer $customer): Customer

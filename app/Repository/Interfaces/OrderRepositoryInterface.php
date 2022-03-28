@@ -3,19 +3,17 @@
 
 namespace App\Repository\Interfaces;
 
-use App\Order;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use App\Entities\Order;
 
 interface OrderRepositoryInterface
 {
 
-    public function find(int $id): Model;
+    public function find(int $id): Order;
 
-    public function all(): Collection;
+    public function all();
 
-    public function insert(Order $order): Model;
+    public function insert(Order $order): Order;
 
-    public function delete(int $id): bool;
+    public function delete(Order $order): bool;
 
 }

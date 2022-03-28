@@ -3,15 +3,14 @@
 
 namespace App\Repository\Interfaces;
 
-use App\OrderItem;
-use Illuminate\Database\Eloquent\Model;
+use App\Entities\OrderItem;
 
 interface OrderItemRepositoryInterface
 {
-    public function find(int $id): Model;
+    public function find(int $id): ?OrderItem;
 
-    public function insert(OrderItem $orderItem): Model;
+    public function insert(OrderItem $orderItem): OrderItem;
 
-    public function update(OrderItem $orderItem): ?Model;
+    public function update(OrderItem $orderItem): ?OrderItem;
 
 }
