@@ -14,11 +14,11 @@ class Version20220328150142 extends AbstractMigration
      */
     public function up(Schema $schema): void
     {
-        (new Builder($schema))->create('customers', function (Table $table) {
+        (new Builder($schema))->create('atomiv.customers', function (Table $table) {
             $table->increments('id');
             $table->string('first_name',32);
             $table->string('last_name',32);
-            $table->timestamps();
+
         });
     }
 

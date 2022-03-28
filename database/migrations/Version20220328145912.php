@@ -14,12 +14,12 @@ class Version20220328145912 extends AbstractMigration
      */
     public function up(Schema $schema): void
     {
-        (new Builder($schema))->create('products', function (Table $table) {
+        (new Builder($schema))->create('atomiv.products', function (Table $table) {
             $table->increments('id');
             $table->string('code',32);
             $table->string('description')->setNotnull(true);
             $table->decimal('unit_price',12,2);
-            $table->timestamps();
+
         });
     }
 

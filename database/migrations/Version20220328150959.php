@@ -14,7 +14,7 @@ class Version20220328150959 extends AbstractMigration
      */
     public function up(Schema $schema): void
     {
-        (new Builder($schema))->create('order_items', function (Table $table) {
+        (new Builder($schema))->create('atomiv.order_items', function (Table $table) {
             $table->increments('id');
             $table->unsignedInteger('order_id');
             $table->unsignedInteger('product_id');
