@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use App\Http\Resources\OrderItemsResource;
 class OrderResource extends JsonResource
 {
     /**
@@ -12,13 +12,13 @@ class OrderResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'customerId' => $this->customer_id,
-            'orderDate' => $this->order_date,
-            'orderItems' => OrderItemsResource::collection($this->orderItems)
+            'id' => $this->getId(),
+            'customerId' => $this->getCustomerId(),
+            'orderDate' => $this->getOrderDate(),
+            'orderItems' => OrderItemsResource::collection($this->getOrderItems())
         ];
     }
 }
