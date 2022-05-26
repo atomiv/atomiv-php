@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
-    use RefreshDatabase;
 
     private $customer;
 
@@ -59,7 +58,7 @@ class CustomerTest extends TestCase
 
     public function testCustomerFirstNameHaveTotBeWithoutNumbers(){
 
-        $this->post('api/customers',$this->validFields(['first_name'=>"Jonh123"]))
+        $this->post('api/customers',$this->validFields(['first_name'=>"John123"]))
             ->assertSessionHasErrors('first_name');
     }
 
