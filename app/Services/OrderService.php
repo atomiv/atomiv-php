@@ -4,8 +4,8 @@
 namespace App\Services;
 
 
-use App\Order;
-use App\OrderItem;
+use App\Records\OrderRecord;
+use App\Records\OrderItemRecord;
 use App\Repository\OrderItemRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
@@ -36,10 +36,10 @@ class OrderService implements OrderServiceInterface
 
     public function insert(CreateOrderRequestDto $request)
     {
-        $order = new Order();
+        $order = new OrderRecord();
 
-        $order->customer_id = $request->getCustomerId();
-        $order->order_date = $request->getOrderDate();
+        $order->setCustomerId($request->getCustomerId());
+        $order->setOrderDate();
 
 
         $order = $this->orderRepository->insert($order);
@@ -50,36 +50,34 @@ class OrderService implements OrderServiceInterface
 
             $product = $this->productRepository->find($item->getProductId());
 
-            $orderItem = new OrderItem();
+            $orderItem = new OrderItemRecord();
 
-            $orderItem->order_id = $order->id;
-            $orderItem->product_id = $product->id;
-            $orderItem->product_price = $product->unit_price;
-            $orderItem->product_code = $product->code;
-            $orderItem->quantity = $item->getQuantity();
+            $orderItem->setOrder($order);
+            $orderItem->setProductId($product->getId());
+            $orderItem->setProductPrice($product->getUnitPrice());
+            $orderItem->setProductCode($product->getCode());
+            $orderItem->setQuantity($item->getQuantity());
 
             $this->orderItemRepository->insert($orderItem);
         }
 
 
-        return $order->load('orderItems');
+        return $order;
     }
 
     public function update(UpdateOrderRequestDto $request,int $id){
-
         foreach ($request->getOrderItems() as $item){
 
             $product = $this->productRepository->find($item->getProductId());
 
-            $productItem = $this->orderItemRepository->find($item->getOrderItemId());
+            $orderItem = $this->orderItemRepository->find($item->getOrderItemId());
 
-            $productItem->product_id = $product->id;
-            $productItem->product_code = $product->code;
-            $productItem->product_price = $product->unit_price;
+            $orderItem->setProductId($product->getId());
+            $orderItem->setProductPrice($product->getUnitPrice());
+            $orderItem->setProductCode($product->getCode());
+            $orderItem->setQuantity($item->getQuantity());
 
-            $productItem->quantity = $item->getQuantity();
-
-            $this->orderItemRepository->update($productItem);
+            $this->orderItemRepository->update($orderItem);
 
         }
 
@@ -87,11 +85,10 @@ class OrderService implements OrderServiceInterface
 
     }
 
-    public function delete(int $id){
+    public function delete(int $id): bool
+    {
         $order = $this->orderRepository->find($id);
 
-       return $this->orderRepository->delete($order->id);
-
-       //TODO:Cascade delete
+        return $this->orderRepository->delete($order);
     }
 }
