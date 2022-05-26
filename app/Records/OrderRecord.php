@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entities;
+namespace App\Records;
 
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="orders")
  */
-class Order
+class OrderRecord
 {
     /**
      * @ORM\Id
@@ -28,6 +28,11 @@ class Order
      */
     private $orderDate;
 
+    /**
+     * @ORM\OneToMany(targetEntity="OrderItemRecord", mappedBy="order")
+     */
+    private $orderItems;
+
     public function getId(){
         return $this->id;
     }
@@ -40,11 +45,19 @@ class Order
         return $this->customerId;
     }
 
-    public function setOrderDate(string $orderDate){
-        $this->orderDate = new Carbon($orderDate);
+    public function setOrderDate(){
+        $this->orderDate = Carbon::now()->toDate();
     }
 
     public function getOrderDate(){
         return $this->orderDate;
+    }
+
+    public function addOrderItem(OrderItemRecord $orderItem){
+        $this->orderItems[] = $orderItem;
+    }
+
+    public function getOrderItems(){
+        return $this->orderItems->toArray();
     }
 }

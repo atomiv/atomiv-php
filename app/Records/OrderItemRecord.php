@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entities;
+namespace App\Records;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="order_items")
  */
-class OrderItem
+class OrderItemRecord
 {
     /**
      * @ORM\Id
@@ -18,9 +18,10 @@ class OrderItem
     private $id;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\ManyToOne(targetEntity="OrderRecord", inversedBy="orders")
+     * @ORM\JoinColumn(name="order_id", nullable=false, referencedColumnName="id")
      */
-    private $orderId;
+    protected $order;
 
     /**
      * @ORM\Column(type="integer")
@@ -46,12 +47,10 @@ class OrderItem
         return $this->id;
     }
 
-    public function setOrderId(int $orderId){
-        $this->orderId = $orderId;
-    }
+    public function setOrder(OrderRecord $order){
+        $order->addOrderItem($this);
 
-    public function getOrderId(){
-        return $this->orderId;
+        $this->order = $order;
     }
 
     public function setProductId(int $productId){
