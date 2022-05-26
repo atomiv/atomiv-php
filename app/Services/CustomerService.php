@@ -3,7 +3,7 @@
 
 namespace App\Services;
 
-use App\Entities\Customer;
+use App\Records\CustomerRecord;
 use App\Repository\CustomerRepository;
 use App\Services\Dto\CreateCustomerRequestDto;
 use App\Services\Dto\UpdateCustomerRequestDto;
@@ -30,7 +30,7 @@ class CustomerService implements CustomerServiceInterface
     }
 
     public function insert(CreateCustomerRequestDto $request){
-        $customer = new Customer();
+        $customer = new CustomerRecord();
 
         $customer->setFirstName($request->getFirstName());
         $customer->setLastName($request->getLastName());
