@@ -3,18 +3,18 @@
 
 namespace App\Repository\Interfaces;
 
-use App\Entities\Product;
+use App\Records\ProductRecord;
 
 interface ProductRepositoryInterface
 {
-    public function find(int $id): ?Product;
+    public function find(int $id): ?ProductRecord;
 
     public function all();
 
-    public function insert(Product $product) : Product;
+    public function insert(ProductRecord $product) : ProductRecord;
 
-    public function update(Product $product) : Product;
+    public function update(ProductRecord $product) : ProductRecord;
 
-    public function delete(Product $product): bool;
+    public function delete(ProductRecord $product): bool;
 
 }

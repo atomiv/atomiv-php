@@ -3,17 +3,17 @@
 
 namespace App\Repository\Interfaces;
 
-use App\Entities\Order;
+use App\Records\OrderRecord;
 
 interface OrderRepositoryInterface
 {
 
-    public function find(int $id): Order;
+    public function find(int $id): OrderRecord;
 
     public function all();
 
-    public function insert(Order $order): Order;
+    public function insert(OrderRecord $order): OrderRecord;
 
-    public function delete(Order $order): bool;
+    public function delete(OrderRecord $order): bool;
 
 }

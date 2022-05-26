@@ -3,14 +3,14 @@
 
 namespace App\Repository\Interfaces;
 
-use App\Entities\OrderItem;
+use App\Records\OrderItemRecord;
 
 interface OrderItemRepositoryInterface
 {
-    public function find(int $id): ?OrderItem;
+    public function find(int $id): ?OrderItemRecord;
 
-    public function insert(OrderItem $orderItem): OrderItem;
+    public function insert(OrderItemRecord $orderItem): OrderItemRecord;
 
-    public function update(OrderItem $orderItem): ?OrderItem;
+    public function update(OrderItemRecord $orderItem): ?OrderItemRecord;
 
 }

@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Customer;
-use App\Entities\Order;
+use App\Records\OrderRecord;
 use App\Repository\Interfaces\OrderRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -13,7 +13,7 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * @var string
      */
-    private $class = 'App\Entities\Order';
+    private $class = 'App\Records\OrderRecord';
 
     /**
      * @var EntityManager
@@ -25,7 +25,7 @@ class OrderRepository implements OrderRepositoryInterface
         $this->em = $em;
     }
 
-    public function find(int $id): Order
+    public function find(int $id): OrderRecord
     {
         return $this->em->getRepository($this->class)->find($id);
     }
@@ -46,7 +46,7 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
-    public function insert(Order $order): Order
+    public function insert(OrderRecord $order): OrderRecord
     {
         $this->em->persist($order);
 
@@ -55,7 +55,7 @@ class OrderRepository implements OrderRepositoryInterface
         return $order;
     }
 
-    public function delete(Order $order): bool
+    public function delete(OrderRecord $order): bool
     {
         $this->em->remove($order);
 

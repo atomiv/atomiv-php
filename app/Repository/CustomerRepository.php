@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entities\Customer;
+use App\Records\CustomerRecord;
 use App\Repository\Interfaces\CustomerRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -12,7 +12,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * @var string
      */
-    private $class = 'App\Entities\Customer';
+    private $class = 'App\Records\CustomerRecord';
 
     /**
      * @var EntityManager
@@ -24,8 +24,9 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->em = $em;
     }
 
-    public function find(int $id): Customer
+    public function find(int $id): CustomerRecord
     {
+
         return $this->em->getRepository($this->class)->find($id);
     }
 
@@ -34,7 +35,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(Customer $customer): Customer
+    public function insert(CustomerRecord $customer): CustomerRecord
     {
         $this->em->persist($customer);
 
@@ -43,7 +44,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $customer;
     }
 
-    public function update(Customer $customer): Customer
+    public function update(CustomerRecord $customer): CustomerRecord
     {
         $this->em->persist($customer);
 
@@ -52,7 +53,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $customer;
     }
 
-    public function delete(Customer $customer): bool
+    public function delete(CustomerRecord $customer): bool
     {
         $this->em->remove($customer);
 

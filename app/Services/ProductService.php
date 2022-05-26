@@ -4,7 +4,7 @@
 namespace App\Services;
 
 
-use App\Entities\Product;
+use App\Records\ProductRecord;
 use App\Repository\ProductRepository;
 use App\Services\Dto\CreateProductRequestDto;
 use App\Services\Dto\UpdateProductRequestDto;
@@ -30,7 +30,7 @@ class ProductService implements ProductServiceInterface
     }
 
     public function insert(CreateProductRequestDto $request){
-        $product = new Product();
+        $product = new ProductRecord();
 
         $product->setCode($request->getCode());
         $product->setDescription($request->getDescription());
