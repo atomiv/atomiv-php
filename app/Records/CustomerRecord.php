@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entities;
+namespace App\Records;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="customers")
  */
-class Customer
+class CustomerRecord
 {
     /**
      * @ORM\Id
