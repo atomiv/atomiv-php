@@ -3,7 +3,7 @@
 
 namespace App\Repository;
 
-use App\Entities\Product;
+use App\Records\ProductRecord;
 use App\Repository\Interfaces\ProductRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -12,7 +12,7 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @var string
      */
-    private $class = 'App\Entities\Product';
+    private $class = 'App\Records\ProductRecord';
 
     /**
      * @var EntityManager
@@ -24,7 +24,7 @@ class ProductRepository implements ProductRepositoryInterface
         $this->em = $em;
     }
 
-    public function find(int $id): Product
+    public function find(int $id): ProductRecord
     {
         return $this->em->getRepository($this->class)->find($id);
     }
@@ -34,7 +34,7 @@ class ProductRepository implements ProductRepositoryInterface
         return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(Product $product): Product
+    public function insert(ProductRecord $product): ProductRecord
     {
         $this->em->persist($product);
 
@@ -43,7 +43,7 @@ class ProductRepository implements ProductRepositoryInterface
         return $product;
     }
 
-    public function update(Product $product): Product
+    public function update(ProductRecord $product): ProductRecord
     {
         $this->em->persist($product);
 
@@ -52,7 +52,7 @@ class ProductRepository implements ProductRepositoryInterface
         return $product;
     }
 
-    public function delete(Product $product): bool
+    public function delete(ProductRecord $product): bool
     {
         $this->em->remove($product);
 
