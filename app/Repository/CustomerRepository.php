@@ -2,47 +2,63 @@
 
 namespace App\Repository;
 
-use App\Customer;
+use App\Records\CustomerRecord;
 use App\Repository\Interfaces\CustomerRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Doctrine\ORM\EntityManager;
+
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
-    private $customerModel;
+    /**
+     * @var string
+     */
+    private $class = 'App\Records\CustomerRecord';
 
-    public function __construct(Customer $customerModel)
+    /**
+     * @var EntityManager
+     */
+    private $em;
+
+    public function __construct(EntityManager $em)
     {
-        $this->customerModel = $customerModel;
+        $this->em = $em;
     }
 
-    public function find(int $id): Model
+    public function find(int $id): CustomerRecord
     {
-        return $this->customerModel->find($id);
+
+        return $this->em->getRepository($this->class)->find($id);
     }
 
-    public function all() : Collection
+    public function all()
     {
-        return $this->customerModel->all();
+        return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(Customer $customer): Model
+    public function insert(CustomerRecord $customer): CustomerRecord
     {
-        $customer->save();
+        $this->em->persist($customer);
+
+        $this->em->flush();
 
         return $customer;
     }
 
-    public function update(Customer $customer) : Model
+    public function update(CustomerRecord $customer): CustomerRecord
     {
-        $customer->save();
+        $this->em->persist($customer);
+
+        $this->em->flush();
 
         return $customer;
-
     }
 
-    public function delete(int $id) : bool
+    public function delete(CustomerRecord $customer): bool
     {
-        return $this->customerModel->destroy($id);
+        $this->em->remove($customer);
+
+        $this->em->flush();
+
+        return true;
     }
 }

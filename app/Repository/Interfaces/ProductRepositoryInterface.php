@@ -3,20 +3,18 @@
 
 namespace App\Repository\Interfaces;
 
-use App\Product;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use App\Records\ProductRecord;
 
 interface ProductRepositoryInterface
 {
-    public function find(int $id): Model;
+    public function find(int $id): ?ProductRecord;
 
-    public function all(): Collection;
+    public function all();
 
-    public function insert(Product $product): Model;
+    public function insert(ProductRecord $product) : ProductRecord;
 
-    public function update(Product $product): ?Model;
+    public function update(ProductRecord $product) : ProductRecord;
 
-    public function delete(int $id): bool;
+    public function delete(ProductRecord $product): bool;
 
 }

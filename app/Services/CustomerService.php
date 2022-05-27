@@ -3,7 +3,7 @@
 
 namespace App\Services;
 
-use App\Customer;
+use App\Records\CustomerRecord;
 use App\Repository\CustomerRepository;
 use App\Services\Dto\CreateCustomerRequestDto;
 use App\Services\Dto\UpdateCustomerRequestDto;
@@ -30,10 +30,10 @@ class CustomerService implements CustomerServiceInterface
     }
 
     public function insert(CreateCustomerRequestDto $request){
-        $customer = new Customer();
+        $customer = new CustomerRecord();
 
-        $customer->first_name = $request->getFirstName();
-        $customer->last_name = $request->getLastName();
+        $customer->setFirstName($request->getFirstName());
+        $customer->setLastName($request->getLastName());
 
         return $this->customerRepository->insert($customer);
     }
@@ -41,8 +41,8 @@ class CustomerService implements CustomerServiceInterface
     public function update(UpdateCustomerRequestDto $request,$id){
         $customer = $this->customerRepository->find($id);
 
-        $customer->first_name = $request->getFirstName();
-        $customer->last_name = $request->getLastName();
+        $customer->setFirstName($request->getFirstName());
+        $customer->setLastName($request->getLastName());
 
         $this->customerRepository->update($customer);
 
@@ -50,7 +50,8 @@ class CustomerService implements CustomerServiceInterface
     }
 
     public function delete(int $id){
+        $customer = $this->customerRepository->find($id);
 
-        return $this->customerRepository->delete($id);
+        return $this->customerRepository->delete($customer);
     }
 }

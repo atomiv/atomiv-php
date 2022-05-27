@@ -14,12 +14,13 @@ class OrderItemsResource extends JsonResource
      */
     public function toArray($request)
     {
+
         return [
-            'id' => $this->id,
-            'productId' => $this->product_id,
-            'productCode' => $this->product_code,
-            'productPrice' => $this->product_price,
-            'quantity' => $this->quantity
+            'id' => $this->getId(),
+            'productId' => $this->getProductId(),
+            'productCode' => $this->getProductCode(),
+            'productPrice' => $this->getProductPrice(),
+            'quantity' => $this->getQuantity()
         ];
     }
 }

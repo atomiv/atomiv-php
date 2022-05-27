@@ -2,40 +2,66 @@
 
 namespace App\Repository;
 
-use App\Order;
+use App\Customer;
+use App\Records\OrderRecord;
 use App\Repository\Interfaces\OrderRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Doctrine\ORM\EntityManager;
+
 
 class OrderRepository implements OrderRepositoryInterface
 {
-    private $orderModel;
+    /**
+     * @var string
+     */
+    private $class = 'App\Records\OrderRecord';
 
-    public function __construct(Order $orderModel)
+    /**
+     * @var EntityManager
+     */
+    private $em;
+
+    public function __construct(EntityManager $em)
     {
-        $this->orderModel = $orderModel;
+        $this->em = $em;
     }
 
-    public function find(int $id): Model
+    public function find(int $id): OrderRecord
     {
-        return $this->orderModel->with('orderItems')->find($id);
+        return $this->em->getRepository($this->class)->find($id);
     }
 
-    public function all(): Collection
+    public function all()
     {
-      return $this->orderModel->with('orderItems')->get();
+        return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert($order): Model
-    {
-       $order->save();
 
-       return $order;
+    public function update(Customer $customer): Customer
+    {
+        $this->em->persist($customer);
+
+        $this->em->flush();
+
+        return $customer;
     }
 
-    public function delete(int $id): bool
+
+    public function insert(OrderRecord $order): OrderRecord
     {
-        return $this->orderModel->destroy($id);
+        $this->em->persist($order);
+
+        $this->em->flush();
+
+        return $order;
+    }
+
+    public function delete(OrderRecord $order): bool
+    {
+        $this->em->remove($order);
+
+        $this->em->flush();
+
+        return true;
 
     }
 
