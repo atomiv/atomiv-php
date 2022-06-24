@@ -3,6 +3,7 @@
 
 namespace App\Repository;
 
+use App\Entities\Product;
 use App\Records\ProductRecord;
 use App\Repository\Interfaces\ProductRepositoryInterface;
 use Doctrine\ORM\EntityManager;
@@ -29,35 +30,43 @@ class ProductRepository implements ProductRepositoryInterface
         return $this->em->getRepository($this->class)->find($id);
     }
 
-    public function all()
+    public function all(): array
     {
         return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(ProductRecord $product): ProductRecord
+    public function add(Product $product): void
     {
-        $this->em->persist($product);
+        $productRecord = new ProductRecord();
 
+        $productRecord->setUnitPrice($product->getUnitPrice());
+        $productRecord->setDescription($product->getDescription());
+        $productRecord->setCode($product->getCode());
+
+        $this->em->persist($productRecord);
         $this->em->flush();
-
-        return $product;
     }
 
-    public function update(ProductRecord $product): ProductRecord
+    public function update(Product $product): ProductRecord
     {
-        $this->em->persist($product);
+        $productRecord = $this->find($product->getId());
 
+        $productRecord->setUnitPrice($product->getUnitPrice());
+        $productRecord->setDescription($product->getDescription());
+        $productRecord->setCode($product->getCode());
+
+        $this->em->persist($productRecord);
         $this->em->flush();
 
-        return $product;
+        return $productRecord;
     }
 
-    public function delete(ProductRecord $product): bool
+    public function remove(Product $product): void
     {
-        $this->em->remove($product);
+        $productRecord = $this->find($product->getId());
 
+        $this->em->remove($productRecord);
         $this->em->flush();
-        return true;
     }
 
 }

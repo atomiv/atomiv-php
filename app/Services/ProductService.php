@@ -4,7 +4,7 @@
 namespace App\Services;
 
 
-use App\Records\ProductRecord;
+use App\Entities\Product;
 use App\Repository\ProductRepository;
 use App\Services\Dto\CreateProductRequestDto;
 use App\Services\Dto\UpdateProductRequestDto;
@@ -30,18 +30,21 @@ class ProductService implements ProductServiceInterface
     }
 
     public function insert(CreateProductRequestDto $request){
-        $product = new ProductRecord();
+        $product = new Product();
 
         $product->setCode($request->getCode());
         $product->setDescription($request->getDescription());
         $product->setUnitPrice($request->getUnitPrice());
 
-        return $this->productRepository->insert($product);
+        $this->productRepository->add($product);
     }
 
     public function update(UpdateProductRequestDto $request, int $id){
-        $product = $this->productRepository->find($id);
+        $productRecord = $this->productRepository->find($id);
 
+        $product = new Product();
+
+        $product->setId($productRecord->getId());
         $product->setCode($request->getCode());
         $product->setDescription($request->getDescription());
         $product->setUnitPrice($request->getUnitPrice());
@@ -50,8 +53,11 @@ class ProductService implements ProductServiceInterface
     }
 
     public function delete(int $id){
-        $product = $this->productRepository->find($id);
+        $productRecord = $this->productRepository->find($id);
 
-        return $this->productRepository->delete($product);
+        $product = new Product();
+        $product->setId($productRecord->getId());
+
+        $this->productRepository->remove($product);
     }
 }
