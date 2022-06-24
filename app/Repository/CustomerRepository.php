@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entities\Customer;
 use App\Records\CustomerRecord;
 use App\Repository\Interfaces\CustomerRepositoryInterface;
 use Doctrine\ORM\EntityManager;
@@ -26,39 +27,47 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     public function find(int $id): CustomerRecord
     {
-
         return $this->em->getRepository($this->class)->find($id);
     }
 
-    public function all()
+    public function all(): array
     {
         return $this->em->getRepository($this->class)->findAll();
     }
 
-    public function insert(CustomerRecord $customer): CustomerRecord
+    public function add(Customer $customer): void
     {
-        $this->em->persist($customer);
+        $customerRecord = new CustomerRecord();
+
+        $customerRecord->setFirstName($customer->getFirstName());
+        $customerRecord->setLastName($customer->getLastName());
+
+        $this->em->persist($customerRecord);
+
+        $this->em->flush();
+    }
+
+    public function update(Customer $customer): CustomerRecord
+    {
+        $customerRecord = $this->find($customer->getId());
+
+        $customerRecord->setFirstName($customer->getFirstName());
+        $customerRecord->setLastName($customer->getLastName());
+
+        $this->em->persist($customerRecord);
 
         $this->em->flush();
 
-        return $customer;
+        return $customerRecord;
     }
 
-    public function update(CustomerRecord $customer): CustomerRecord
+    public function remove(Customer $customer): void
     {
-        $this->em->persist($customer);
+        $customerRecord = $this->find($customer->getId());
+
+        $this->em->remove($customerRecord);
 
         $this->em->flush();
-
-        return $customer;
     }
 
-    public function delete(CustomerRecord $customer): bool
-    {
-        $this->em->remove($customer);
-
-        $this->em->flush();
-
-        return true;
-    }
 }

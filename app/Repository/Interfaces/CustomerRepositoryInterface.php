@@ -3,18 +3,19 @@
 
 namespace App\Repository\Interfaces;
 
+use App\Entities\Customer;
 use App\Records\CustomerRecord;
 
 interface CustomerRepositoryInterface
 {
     public function find(int $id): CustomerRecord;
 
-    public function all();
+    public function all(): array;
 
-    public function insert(CustomerRecord $customer): CustomerRecord;
+    public function add(Customer $customer): void;
 
-    public function update(CustomerRecord $customer): ?CustomerRecord;
+    public function update(Customer $customer): CustomerRecord;
 
-    public function delete(CustomerRecord $customer): bool;
+    public function remove(Customer $customer): void;
 
 }

@@ -37,17 +37,13 @@ class CustomerController extends Controller
     }
 
     public function create(CreateCustomerFormRequest $request){
-
         $requestDto = new CreateCustomerRequestDto();
         $requestDto->setFirstName($request->first_name);
         $requestDto->setLastName($request->last_name);
 
-        $customer = $this->customerService->insert($requestDto);
+        $this->customerService->insert($requestDto);
 
-        if ($customer)
-            return response(new CustomerResource($customer),201);
-
-        return response('Customer is not created',422);
+        return response('Customer created.',201);
     }
 
     public function update(UpdateCustomerFormRequest $request, $id){
@@ -65,11 +61,8 @@ class CustomerController extends Controller
     }
 
     public function delete($id){
-        $customer = $this->customerService->delete($id);
+       $this->customerService->delete($id);
 
-        if ($customer)
-            return response('Customer successfully deleted',200);
-
-        return response('Customer is not deleted',409);
+       return response('Customer successfully deleted',200);
     }
 }
