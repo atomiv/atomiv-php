@@ -14,7 +14,11 @@ class CustomerTest extends TestCase
     {
         parent::setUp();
 
-        $this->customer = $this->post('api/customers',$this->validFields());
+        $this->post('api/customers',$this->validFields());
+
+        $customers = $this->get('api/customers');
+
+        $this->customer = $customers['data'][0];
     }
 
     public function testListSingleCustomer(){
@@ -74,11 +78,9 @@ class CustomerTest extends TestCase
         $response->assertStatus(200);
 
         $this->get('api/customers/' . $this->customer['id'])->assertSee('Jack');
-
     }
 
     public function testDeleteCustomer(){
-
         $response = $this->delete('api/customers/' . $this->customer['id']);
 
         $response->assertStatus(200);

@@ -5,7 +5,9 @@ namespace App\Services\Interfaces;
 
 
 use App\Services\Dto\CreateCustomerRequestDto;
+use App\Services\Dto\CreateCustomerResponseDto;
 use App\Services\Dto\UpdateCustomerRequestDto;
+use App\Services\Dto\UpdateCustomerResponseDto;
 
 interface CustomerServiceInterface
 {
@@ -13,9 +15,9 @@ interface CustomerServiceInterface
 
     public function getAllCustomers();
 
-    public function insert(CreateCustomerRequestDto $request);
+    public function add(CreateCustomerRequestDto $request): CreateCustomerResponseDto;
 
-    public function update(UpdateCustomerRequestDto $request,int $id);
+    public function update(UpdateCustomerRequestDto $request,int $id): UpdateCustomerResponseDto;
 
-    public function delete(int $id);
+    public function remove(int $id): void;
 }

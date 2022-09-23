@@ -3,10 +3,13 @@
 
 namespace App\Services;
 
-use App\Records\CustomerRecord;
+use App\Entities\Customer;
+
 use App\Repository\CustomerRepository;
 use App\Services\Dto\CreateCustomerRequestDto;
+use App\Services\Dto\CreateCustomerResponseDto;
 use App\Services\Dto\UpdateCustomerRequestDto;
+use App\Services\Dto\UpdateCustomerResponseDto;
 use App\Services\Interfaces\CustomerServiceInterface;
 
 class CustomerService implements CustomerServiceInterface
@@ -29,29 +32,51 @@ class CustomerService implements CustomerServiceInterface
         return $this->customerRepository->all();
     }
 
-    public function insert(CreateCustomerRequestDto $request){
-        $customer = new CustomerRecord();
+    public function add(CreateCustomerRequestDto $request) : CreateCustomerResponseDto
+    {
+        $customer = new Customer();
 
         $customer->setFirstName($request->getFirstName());
         $customer->setLastName($request->getLastName());
 
-        return $this->customerRepository->insert($customer);
+        $this->customerRepository->add($customer);
+
+        $response = new CreateCustomerResponseDto();
+
+        $response->setId($customer->getId());
+        $response->setFirstName($customer->getFirstName());
+        $response->setLastName($customer->getLastName());
+
+        return $response;
     }
 
-    public function update(UpdateCustomerRequestDto $request,$id){
-        $customer = $this->customerRepository->find($id);
+    public function update(UpdateCustomerRequestDto $request,$id) : UpdateCustomerResponseDto
+    {
+        $customerRecord = $this->customerRepository->find($id);
 
+        $customer = new Customer();
+
+        $customer->setId($customerRecord->getId());
         $customer->setFirstName($request->getFirstName());
         $customer->setLastName($request->getLastName());
 
         $this->customerRepository->update($customer);
 
-        return $customer;
+        $response = new UpdateCustomerResponseDto();
+        $response->setId($customer->getId());
+        $response->setFirstName($customer->getFirstName());
+        $response->setLastName($customer->getLastName());
+
+        return $response;
     }
 
-    public function delete(int $id){
-        $customer = $this->customerRepository->find($id);
+    public function remove(int $id): void
+    {
+        $customerRecord = $this->customerRepository->find($id);
 
-        return $this->customerRepository->delete($customer);
+        $customer = new Customer();
+        $customer->setId($customerRecord->getId());
+
+        $this->customerRepository->remove($customer);
     }
 }
