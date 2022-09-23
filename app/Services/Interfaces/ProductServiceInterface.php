@@ -5,7 +5,9 @@ namespace App\Services\Interfaces;
 
 
 use App\Services\Dto\CreateProductRequestDto;
+use App\Services\Dto\CreateProductResponseDto;
 use App\Services\Dto\UpdateProductRequestDto;
+use App\Services\Dto\UpdateProductResponseDto;
 
 interface ProductServiceInterface
 {
@@ -13,9 +15,9 @@ interface ProductServiceInterface
 
     public function getAllProducts();
 
-    public function insert(CreateProductRequestDto $request);
+    public function add(CreateProductRequestDto $request): CreateProductResponseDto;
 
-    public function update(UpdateProductRequestDto $request, int $id);
+    public function update(UpdateProductRequestDto $request, int $id):  UpdateProductResponseDto;
 
-    public function delete(int $id);
+    public function remove(int $id): void;
 }

@@ -43,10 +43,9 @@ class ProductController extends Controller
         $requestDto->setDescription($request->description);
         $requestDto->setUnitPrice($request->unit_price);
 
-        $this->productService->insert($requestDto);
+        $product = $this->productService->add($requestDto);
 
-
-        return response('Product created.',201);
+        return response(new ProductResource($product),201);
     }
 
     public function update(UpdateProductFormRequest $request, $id){
@@ -58,14 +57,11 @@ class ProductController extends Controller
 
         $product = $this->productService->update($requestDto,$id);
 
-        if ($product)
-            return response('Product successfully updated',200);
-
-        return response('The product is not updated',422);
+        return response([new ProductResource($product),'message' =>'Product successfully updated'],200);
     }
 
     public function delete($id){
-        $this->productService->delete($id);
+        $this->productService->remove($id);
 
         return response('Product successfully deleted',200);
     }

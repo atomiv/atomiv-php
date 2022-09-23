@@ -45,6 +45,8 @@ class ProductRepository implements ProductRepositoryInterface
 
         $this->em->persist($productRecord);
         $this->em->flush();
+
+        $product->setId($productRecord->getId());
     }
 
     public function update(Product $product): ProductRecord

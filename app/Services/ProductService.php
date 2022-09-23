@@ -7,7 +7,9 @@ namespace App\Services;
 use App\Entities\Product;
 use App\Repository\ProductRepository;
 use App\Services\Dto\CreateProductRequestDto;
+use App\Services\Dto\CreateProductResponseDto;
 use App\Services\Dto\UpdateProductRequestDto;
+use App\Services\Dto\UpdateProductResponseDto;
 use App\Services\Interfaces\ProductServiceInterface;
 
 class ProductService implements ProductServiceInterface
@@ -29,7 +31,8 @@ class ProductService implements ProductServiceInterface
         return $this->productRepository->all();
     }
 
-    public function insert(CreateProductRequestDto $request){
+    public function add(CreateProductRequestDto $request): CreateProductResponseDto
+    {
         $product = new Product();
 
         $product->setCode($request->getCode());
@@ -37,9 +40,19 @@ class ProductService implements ProductServiceInterface
         $product->setUnitPrice($request->getUnitPrice());
 
         $this->productRepository->add($product);
+
+        $response = new CreateProductResponseDto();
+        $response->setId($product->getId());
+        $response->setCode($product->getCode());
+        $response->setDescription($product->getDescription());
+        $response->setUnitPrice($product->getUnitPrice());
+
+        return $response;
+
     }
 
-    public function update(UpdateProductRequestDto $request, int $id){
+    public function update(UpdateProductRequestDto $request, int $id): UpdateProductResponseDto
+    {
         $productRecord = $this->productRepository->find($id);
 
         $product = new Product();
@@ -49,10 +62,19 @@ class ProductService implements ProductServiceInterface
         $product->setDescription($request->getDescription());
         $product->setUnitPrice($request->getUnitPrice());
 
-        return $this->productRepository->update($product);
+        $this->productRepository->update($product);
+
+        $response = new UpdateProductResponseDto();
+        $response->setId($product->getId());
+        $response->setCode($product->getCode());
+        $response->setUnitPrice($product->getUnitPrice());
+        $response->setDescription($product->getDescription());
+
+        return $response;
     }
 
-    public function delete(int $id){
+    public function remove(int $id): void
+    {
         $productRecord = $this->productRepository->find($id);
 
         $product = new Product();

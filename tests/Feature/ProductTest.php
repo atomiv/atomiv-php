@@ -41,8 +41,8 @@ class ProductTest extends TestCase
 
         $response->assertStatus(201);
 
-//        $this->get('/api/products/'. $response["id"])
-//            ->assertSee($this->validFields()["code"],$this->validFields()["description"]);
+        $this->get('/api/products/'. $response["id"])
+            ->assertSee($this->validFields()["code"],$this->validFields()["description"]);
 
     }
 
