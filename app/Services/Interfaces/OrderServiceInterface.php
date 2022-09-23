@@ -5,7 +5,9 @@ namespace App\Services\Interfaces;
 
 
 use App\Services\Dto\CreateOrderRequestDto;
+use App\Services\Dto\CreateOrderResponseDto;
 use App\Services\Dto\UpdateOrderRequestDto;
+use App\Services\Dto\UpdateOrderResponseDto;
 
 interface OrderServiceInterface
 {
@@ -13,9 +15,9 @@ interface OrderServiceInterface
 
     public function getAllOrders();
 
-    public function insert(CreateOrderRequestDto $request);
+    public function add(CreateOrderRequestDto $request): CreateOrderResponseDto;
 
-    public function update(UpdateOrderRequestDto $request, int $id);
+    public function update(UpdateOrderRequestDto $request, int $id): UpdateOrderResponseDto;
 
-    public function delete(int $id);
+    public function remove(int $id);
 }

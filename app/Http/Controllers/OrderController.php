@@ -20,7 +20,6 @@ class OrderController extends Controller
     public function __construct(OrderService $orderService)
     {
         $this->orderService = $orderService;
-
     }
 
     public function getOrder($id){
@@ -39,7 +38,7 @@ class OrderController extends Controller
         return response(new OrderCollection($orders),200);
     }
 
-    public function create(CreateOrderFormRequest $request){
+    public function add(CreateOrderFormRequest $request){
 
         $requestDto = new CreateOrderRequestDto();
         $requestDto->setCustomerId($request->customer_id);
@@ -54,12 +53,9 @@ class OrderController extends Controller
             $requestDto->setOrderItems($orderItemRequestDto);
         }
 
-        $order = $this->orderService->insert($requestDto);
+        $order = $this->orderService->add($requestDto);
 
-        if ($order)
-            return response(new OrderResource($order),201);
-
-        return response('The order is not created',422);
+        return response(new OrderResource($order),201);
 
     }
 
@@ -81,20 +77,13 @@ class OrderController extends Controller
 
         $order = $this->orderService->update($requestDto,$id);
 
-        if ($order)
-            return response(new OrderResource($order),200);
-
-        return response('The order is not updated',422);
-
+        return response([new OrderResource($order),'message' => 'Order successfully updated'],200);
     }
 
-    public function delete($id){
-       $order = $this->orderService->delete($id);
+    public function remove($id){
+        $this->orderService->remove($id);
 
-        if ($order)
-            return response('Order successfully deleted',200);
-
-        return response('The order is not deleted',409);
+       return response('Order successfully deleted',200);
     }
 
 }

@@ -18,6 +18,10 @@ class Order
 
     private $orderItems;
 
+    public function setId(int $id){
+        $this->id = $id;
+    }
+
     public function getId(){
         return $this->id;
     }

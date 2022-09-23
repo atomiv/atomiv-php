@@ -4,14 +4,18 @@
 namespace App\Services;
 
 
-use App\Records\OrderRecord;
+use App\Entities\Order;
 use App\Records\OrderItemRecord;
 use App\Repository\OrderItemRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Services\Dto\CreateOrderRequestDto;
+use App\Services\Dto\CreateOrderResponseDto;
+use App\Services\Dto\UpdateOrderItemResponseDto;
 use App\Services\Dto\UpdateOrderRequestDto;
+use App\Services\Dto\UpdateOrderResponseDto;
 use App\Services\Interfaces\OrderServiceInterface;
+use Carbon\Carbon;
 
 class OrderService implements OrderServiceInterface
 {
@@ -34,16 +38,14 @@ class OrderService implements OrderServiceInterface
 
     }
 
-    public function insert(CreateOrderRequestDto $request)
+    public function add(CreateOrderRequestDto $request): CreateOrderResponseDto
     {
-        $order = new OrderRecord();
+        $order = new Order();
 
         $order->setCustomerId($request->getCustomerId());
-        $order->setOrderDate();
+        $order->setOrderDate(Carbon::now());
 
-
-        $order = $this->orderRepository->insert($order);
-
+        $order = $this->orderRepository->add($order);
         $orderItems = $request->getOrderItems();
 
         foreach ($orderItems as $item){
@@ -62,10 +64,13 @@ class OrderService implements OrderServiceInterface
         }
 
 
-        return $order;
+
     }
 
-    public function update(UpdateOrderRequestDto $request,int $id){
+    public function update(UpdateOrderRequestDto $request,int $id): UpdateOrderResponseDto
+    {
+        $response = new UpdateOrderResponseDto();
+
         foreach ($request->getOrderItems() as $item){
 
             $product = $this->productRepository->find($item->getProductId());
@@ -79,16 +84,31 @@ class OrderService implements OrderServiceInterface
 
             $this->orderItemRepository->update($orderItem);
 
+            $orderItemResponse = new UpdateOrderItemResponseDto();
+            $orderItemResponse->setId($orderItem->getId());
+            $orderItemResponse->setProductId($orderItem->getProductId());
+            $orderItemResponse->setQuantity($orderItem->getQuantity());
+
+            $response->setOrderItems($orderItemResponse);
         }
 
-        return $this->orderRepository->find($id);
-
-    }
-
-    public function delete(int $id): bool
-    {
         $order = $this->orderRepository->find($id);
 
-        return $this->orderRepository->delete($order);
+
+        $response->setId($order->getId());
+        $response->setCustomerId($request->getCustomerId());
+        $response->setOrderDate($order->getOrderDate());
+
+        return $response;
+    }
+
+    public function remove(int $id): void
+    {
+        $orderRecord = $this->orderRepository->find($id);
+
+        $order = new Order();
+        $order->setId($orderRecord->getId());
+
+        $this->orderRepository->remove($order);
     }
 }
