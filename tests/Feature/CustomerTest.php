@@ -42,8 +42,8 @@ class CustomerTest extends TestCase
 
         $response->assertStatus(201);
 
-//        $this->get('api/customers/' . $response["id"])
-//            ->assertSee($this->validFields()['first_name'],$this->validFields()['last_name']);
+        $this->get('api/customers/' . $response["id"])
+            ->assertSee($this->validFields()['first_name'],$this->validFields()['last_name']);
 
     }
 
@@ -78,7 +78,6 @@ class CustomerTest extends TestCase
         $response->assertStatus(200);
 
         $this->get('api/customers/' . $this->customer['id'])->assertSee('Jack');
-
     }
 
     public function testDeleteCustomer(){

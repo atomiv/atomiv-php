@@ -45,6 +45,8 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->em->persist($customerRecord);
 
         $this->em->flush();
+
+        $customer->setId($customerRecord->getId());
     }
 
     public function update(Customer $customer): CustomerRecord

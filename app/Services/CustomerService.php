@@ -4,10 +4,12 @@
 namespace App\Services;
 
 use App\Entities\Customer;
-use App\Records\CustomerRecord;
+
 use App\Repository\CustomerRepository;
 use App\Services\Dto\CreateCustomerRequestDto;
+use App\Services\Dto\CreateCustomerResponseDto;
 use App\Services\Dto\UpdateCustomerRequestDto;
+use App\Services\Dto\UpdateCustomerResponseDto;
 use App\Services\Interfaces\CustomerServiceInterface;
 
 class CustomerService implements CustomerServiceInterface
@@ -30,15 +32,26 @@ class CustomerService implements CustomerServiceInterface
         return $this->customerRepository->all();
     }
 
-    public function insert(CreateCustomerRequestDto $request){
+    public function insert(CreateCustomerRequestDto $request) : CreateCustomerResponseDto
+    {
         $customer = new Customer();
+
         $customer->setFirstName($request->getFirstName());
         $customer->setLastName($request->getLastName());
 
         $this->customerRepository->add($customer);
+
+        $response = new CreateCustomerResponseDto();
+
+        $response->setId($customer->getId());
+        $response->setFirstName($customer->getFirstName());
+        $response->setLastName($customer->getLastName());
+
+        return $response;
     }
 
-    public function update(UpdateCustomerRequestDto $request,$id){
+    public function update(UpdateCustomerRequestDto $request,$id) : UpdateCustomerResponseDto
+    {
         $customerRecord = $this->customerRepository->find($id);
 
         $customer = new Customer();
@@ -49,7 +62,12 @@ class CustomerService implements CustomerServiceInterface
 
         $this->customerRepository->update($customer);
 
-        return $customer;
+        $response = new UpdateCustomerResponseDto();
+        $response->setId($customer->getId());
+        $response->setFirstName($customer->getFirstName());
+        $response->setLastName($customer->getLastName());
+
+        return $response;
     }
 
     public function delete(int $id){
