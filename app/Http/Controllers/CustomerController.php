@@ -41,7 +41,7 @@ class CustomerController extends Controller
         $requestDto->setFirstName($request->first_name);
         $requestDto->setLastName($request->last_name);
 
-        $customer = $this->customerService->insert($requestDto);
+        $customer = $this->customerService->add($requestDto);
 
         return response(new CustomerResource($customer),201);
     }
@@ -58,8 +58,8 @@ class CustomerController extends Controller
     }
 
     public function delete($id){
-       $this->customerService->delete($id);
+       $this->customerService->remove($id);
 
-       return response('Customer successfully deleted',200);
+       return response('Customer successfully removed',200);
     }
 }

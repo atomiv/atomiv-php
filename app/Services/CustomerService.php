@@ -32,7 +32,7 @@ class CustomerService implements CustomerServiceInterface
         return $this->customerRepository->all();
     }
 
-    public function insert(CreateCustomerRequestDto $request) : CreateCustomerResponseDto
+    public function add(CreateCustomerRequestDto $request) : CreateCustomerResponseDto
     {
         $customer = new Customer();
 
@@ -70,7 +70,8 @@ class CustomerService implements CustomerServiceInterface
         return $response;
     }
 
-    public function delete(int $id){
+    public function remove(int $id): void
+    {
         $customerRecord = $this->customerRepository->find($id);
 
         $customer = new Customer();
