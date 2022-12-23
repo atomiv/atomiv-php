@@ -49,7 +49,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customer->setId($customerRecord->getId());
     }
 
-    public function update(Customer $customer): CustomerRecord
+    public function update(Customer $customer): void
     {
         $customerRecord = $this->find($customer->getId());
 
@@ -59,8 +59,6 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->em->persist($customerRecord);
 
         $this->em->flush();
-
-        return $customerRecord;
     }
 
     public function remove(Customer $customer): void

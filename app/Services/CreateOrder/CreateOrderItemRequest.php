@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\CreateOrder;
 
 
-class CreateOrderItemRequestDto
+class CreateOrderItemRequest
 {
     private $product_id;
     private $quantity;

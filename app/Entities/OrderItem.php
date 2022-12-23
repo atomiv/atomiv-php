@@ -20,6 +20,10 @@ class OrderItem
 
     private $quantity;
 
+    public function setId(int $id){
+        return $this->id = $id;
+    }
+
     public function getId(){
         return $this->id;
     }
@@ -63,4 +67,5 @@ class OrderItem
     public function getQuantity(){
         return $this->quantity;
     }
+
 }

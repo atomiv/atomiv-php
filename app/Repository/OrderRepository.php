@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Customer;
+use App\Entities\Order;
 use App\Records\OrderRecord;
 use App\Repository\Interfaces\OrderRepositoryInterface;
 use Doctrine\ORM\EntityManager;
@@ -30,39 +30,29 @@ class OrderRepository implements OrderRepositoryInterface
         return $this->em->getRepository($this->class)->find($id);
     }
 
-    public function all()
+    public function all(): array
     {
         return $this->em->getRepository($this->class)->findAll();
     }
 
-
-    public function update(Customer $customer): Customer
+    public function add(Order $order): void
     {
-        $this->em->persist($customer);
+        $orderRecord = new OrderRecord();
+        $orderRecord->setOrderDate($order->getOrderDate());
+        $orderRecord->setCustomerId($order->getCustomerId());
 
+        $this->em->persist($orderRecord);
         $this->em->flush();
 
-        return $customer;
+        $order->setId($orderRecord->getId());
     }
-
-
-    public function insert(OrderRecord $order): OrderRecord
+    public function remove(Order $order): void
     {
-        $this->em->persist($order);
+        $orderRecord = $this->find($order->getId());
+
+        $this->em->remove($orderRecord);
 
         $this->em->flush();
-
-        return $order;
-    }
-
-    public function delete(OrderRecord $order): bool
-    {
-        $this->em->remove($order);
-
-        $this->em->flush();
-
-        return true;
-
     }
 
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Dto;
+namespace App\Services\CreateCustomer;
 
-class CreateCustomerResponseDto
+class CreateCustomerResponse
 {
     private $first_name;
     private $last_name;

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\CreateOrder;
 
-class CreateOrderRequestDto
+class CreateOrderRequest
 {
     private $customer_id;
     private $order_date;

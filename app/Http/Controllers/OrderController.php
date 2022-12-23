@@ -2,29 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Order;
 use App\Http\Requests\Orders\CreateOrderFormRequest;
 use App\Http\Requests\Orders\UpdateOrderFormRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
-use App\Services\Dto\CreateOrderItemRequestDto;
-use App\Services\Dto\CreateOrderRequestDto;
-use App\Services\Dto\UpdateOrderItemRequestDto;
-use App\Services\Dto\UpdateOrderRequestDto;
-use App\Services\OrderService;
+use App\Services\BrowseOrders\GetAllOrdersHandler;
+use App\Services\CreateOrder\CreateOrderHandler;
+use App\Services\CreateOrder\CreateOrderItemRequest;
+use App\Services\CreateOrder\CreateOrderRequest;
+use App\Services\GetOrder\GetOrderHandler;
+use App\Services\RemoveOrder\RemoveOrderHandler;
+use App\Services\UpdateOrder\UpdateOrderHandler;
+use App\Services\UpdateOrder\UpdateOrderItemRequest;
+use App\Services\UpdateOrder\UpdateOrderRequest;
 use Carbon\Carbon;
 
 class OrderController extends Controller
 {
-    private $orderService;
+    private $updateOrderHandler;
+    private $getAllOrdersHandler;
+    private $getOrderHandler;
+    private $createOrderHandler;
+    private $removeOrderHandler;
 
-    public function __construct(OrderService $orderService)
+    public function __construct(
+        UpdateOrderHandler $updateOrderHandler,
+        CreateOrderHandler $createCustomerHandler,
+        GetAllOrdersHandler $getAllOrdersHandler,
+        GetOrderHandler $getOrderHandler,
+        RemoveOrderHandler $removeOrderHandler
+    )
     {
-        $this->orderService = $orderService;
-
+        $this->updateOrderHandler = $updateOrderHandler;
+        $this->createOrderHandler = $createCustomerHandler;
+        $this->getOrderHandler = $getOrderHandler;
+        $this->getAllOrdersHandler = $getAllOrdersHandler;
+        $this->removeOrderHandler = $removeOrderHandler;
     }
 
     public function getOrder($id){
-        $order = $this->orderService->getOrder($id);
+        $order = $this->getOrderHandler->handle($id);
 
         if ($order)
             return response(new OrderResource($order),200);
@@ -34,44 +52,40 @@ class OrderController extends Controller
 
     public function getAllOrders(){
 
-        $orders = $this->orderService->getAllOrders();
+        $orders = $this->getAllOrdersHandler->handle();
 
         return response(new OrderCollection($orders),200);
     }
 
     public function create(CreateOrderFormRequest $request){
 
-        $requestDto = new CreateOrderRequestDto();
+        $requestDto = new CreateOrderRequest();
         $requestDto->setCustomerId($request->customer_id);
         $requestDto->setOrderDate(Carbon::now());
 
         foreach ($request->items as $item){
-
-            $orderItemRequestDto = new CreateOrderItemRequestDto();
+            $orderItemRequestDto = new CreateOrderItemRequest();
             $orderItemRequestDto->setProductId($item['product_id']);
             $orderItemRequestDto->setQuantity($item['quantity']);
 
             $requestDto->setOrderItems($orderItemRequestDto);
         }
 
-        $order = $this->orderService->insert($requestDto);
+        $order = $this->createOrderHandler->handle($requestDto);
 
-        if ($order)
-            return response(new OrderResource($order),201);
-
-        return response('The order is not created',422);
+        return response(new OrderResource($order),201);
 
     }
 
     public function update(UpdateOrderFormRequest $request, $id){
 
-        $requestDto = new UpdateOrderRequestDto();
+        $requestDto = new UpdateOrderRequest();
         $requestDto->setCustomerId($request->customer_id);
-        $requestDto->setOrderDate(Carbon::now());
+        $requestDto->setOrderId($id);
 
         foreach ($request->items as $item){
 
-            $orderItemRequestDto = new UpdateOrderItemRequestDto();
+            $orderItemRequestDto = new UpdateOrderItemRequest();
             $orderItemRequestDto->setOrderItemId($item['order_item_id']);
             $orderItemRequestDto->setProductId($item['product_id']);
             $orderItemRequestDto->setQuantity($item['quantity']);
@@ -79,22 +93,15 @@ class OrderController extends Controller
             $requestDto->setOrderItems($orderItemRequestDto);
         }
 
-        $order = $this->orderService->update($requestDto,$id);
+        $order = $this->updateOrderHandler->handle($requestDto);
 
-        if ($order)
-            return response(new OrderResource($order),200);
-
-        return response('The order is not updated',422);
-
+        return response([new OrderResource($order),'message' => 'Order successfully updated'],200);
     }
 
-    public function delete($id){
-       $order = $this->orderService->delete($id);
+    public function remove($id){
+        $this->removeOrderHandler->handle($id);
 
-        if ($order)
-            return response('Order successfully deleted',200);
-
-        return response('The order is not deleted',409);
+       return response('Order successfully deleted',200);
     }
 
 }

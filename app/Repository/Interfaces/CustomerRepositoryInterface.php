@@ -14,7 +14,7 @@ interface CustomerRepositoryInterface
 
     public function add(Customer $customer): void;
 
-    public function update(Customer $customer): CustomerRecord;
+    public function update(Customer $customer): void;
 
     public function remove(Customer $customer): void;
 

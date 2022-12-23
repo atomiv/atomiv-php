@@ -2,7 +2,6 @@
 
 namespace App\Records;
 
-use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,8 +44,8 @@ class OrderRecord
         return $this->customerId;
     }
 
-    public function setOrderDate(){
-        $this->orderDate = Carbon::now()->toDate();
+    public function setOrderDate($orderDate){
+        $this->orderDate = $orderDate;
     }
 
     public function getOrderDate(){
