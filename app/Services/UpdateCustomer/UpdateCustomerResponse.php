@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\UpdateCustomer;
 
 
-class UpdateCustomerResponseDto
+class UpdateCustomerResponse
 {
     private $id;
     private $first_name;

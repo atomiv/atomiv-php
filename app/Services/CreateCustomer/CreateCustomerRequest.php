@@ -1,10 +1,9 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\CreateCustomer;
 
-
-class UpdateCustomerRequestDto
+class CreateCustomerRequest
 {
     private $first_name;
     private $last_name;
@@ -24,5 +23,4 @@ class UpdateCustomerRequestDto
     public function setLastName($lastName){
         $this->last_name = $lastName;
     }
-
 }
