@@ -1,29 +1,21 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\CreateProduct;
 
 
-class CreateProductResponseDto
+class CreateProductRequest
 {
-    private $id;
     private $code;
     private $description;
     private $unit_price;
-
-    public function setId(int $id){
-        $this->id = $id;
-    }
-    public function getId(){
-        return $this->id;
-    }
 
     public function getCode()
     {
         return $this->code;
     }
 
-    public function setCode(string $code)
+    public function setCode($code)
     {
         return $this->code = $code;
     }
@@ -33,7 +25,7 @@ class CreateProductResponseDto
         return $this->description;
     }
 
-    public function setDescription(string $description)
+    public function setDescription($description)
     {
        return $this->description = $description;
     }
@@ -42,7 +34,7 @@ class CreateProductResponseDto
         return $this->unit_price;
     }
 
-    public function setUnitPrice(float $unit_price){
+    public function setUnitPrice($unit_price){
         return $this->unit_price = $unit_price;
     }
 }

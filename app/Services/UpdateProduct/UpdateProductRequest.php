@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\UpdateProduct;
 
 
-class CreateProductRequestDto
+class UpdateProductRequest
 {
     private $code;
     private $description;
@@ -27,7 +27,7 @@ class CreateProductRequestDto
 
     public function setDescription($description)
     {
-       return $this->description = $description;
+        return $this->description = $description;
     }
 
     public function getUnitPrice(){
@@ -37,4 +37,5 @@ class CreateProductRequestDto
     public function setUnitPrice($unit_price){
         return $this->unit_price = $unit_price;
     }
+
 }
