@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\UpdateOrder;
 
 
-class CreateOrderItemResponseDto
+class UpdateOrderItemResponse
 {
     private $id;
     private $product_id;

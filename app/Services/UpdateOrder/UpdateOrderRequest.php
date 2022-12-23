@@ -1,15 +1,23 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\UpdateOrder;
 
 
-class UpdateOrderRequestDto
+class UpdateOrderRequest
 {
+    private $order_id;
     private $customer_id;
     private $order_date;
     private $order_items = [];
 
+    public function setOrderId(int $order_id){
+        return $this->order_id = $order_id;
+    }
+
+    public function getOrderId(){
+        return $this->order_id;
+    }
     public function getCustomerId(){
         return $this->customer_id;
     }
@@ -27,12 +35,13 @@ class UpdateOrderRequestDto
         return $this->order_date = $order_date;
     }
 
-    public function getOrderItems(){
+    public function getOrderItems(): array
+    {
         return $this->order_items;
     }
 
     public function setOrderItems($orderItem)
     {
-        array_push($this->order_items,$orderItem);
+        $this->order_items[] = $orderItem;
     }
 }

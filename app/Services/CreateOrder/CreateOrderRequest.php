@@ -1,22 +1,13 @@
 <?php
 
 
-namespace App\Services\Dto;
+namespace App\Services\CreateOrder;
 
-class UpdateOrderResponseDto
+class CreateOrderRequest
 {
-    private $id;
     private $customer_id;
     private $order_date;
     private $order_items = [];
-
-    public function setId(int $id){
-        $this->id = $id;
-    }
-
-    public function getId(){
-        return $this->id;
-    }
 
     public function getCustomerId(){
         return $this->customer_id;
@@ -41,7 +32,6 @@ class UpdateOrderResponseDto
 
     public function setOrderItems($orderItem)
     {
-
         array_push($this->order_items,$orderItem);
     }
 }
