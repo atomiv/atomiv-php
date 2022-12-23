@@ -49,7 +49,7 @@ class ProductRepository implements ProductRepositoryInterface
         $product->setId($productRecord->getId());
     }
 
-    public function update(Product $product): ProductRecord
+    public function update(Product $product): void
     {
         $productRecord = $this->find($product->getId());
 
@@ -60,7 +60,7 @@ class ProductRepository implements ProductRepositoryInterface
         $this->em->persist($productRecord);
         $this->em->flush();
 
-        return $productRecord;
+        $product->setId($productRecord->getId());
     }
 
     public function remove(Product $product): void

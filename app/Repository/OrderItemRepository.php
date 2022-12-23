@@ -3,11 +3,10 @@
 
 namespace App\Repository;
 
+use App\Entities\OrderItem;
 use App\Records\OrderItemRecord;
-
 use App\Repository\Interfaces\OrderItemRepositoryInterface;
 use Doctrine\ORM\EntityManager;
-use Illuminate\Database\Eloquent\Model;
 
 class OrderItemRepository implements OrderItemRepositoryInterface
 {
@@ -15,6 +14,7 @@ class OrderItemRepository implements OrderItemRepositoryInterface
      * @var string
      */
     private $class = 'App\Records\OrderItemRecord';
+    private $orderClass = 'App\Records\OrderRecord';
 
     /**
      * @var EntityManager
@@ -31,22 +31,37 @@ class OrderItemRepository implements OrderItemRepositoryInterface
         return $this->em->getRepository($this->class)->find($id);
     }
 
-    public function insert(OrderItemRecord $orderItem): OrderItemRecord
+    public function add(OrderItem $orderItem): void
     {
-        $this->em->persist($orderItem);
+        $orderItemRecord = new OrderItemRecord();
+        $orderRecord = $this->em->getRepository($this->orderClass)->find($orderItem->getOrderId());
+
+        $orderItemRecord->setOrder($orderRecord);
+        $orderItemRecord->setQuantity($orderItem->getQuantity());
+        $orderItemRecord->setProductId($orderItem->getProductId());
+        $orderItemRecord->setProductCode($orderItem->getProductCode());
+        $orderItemRecord->setProductPrice($orderItem->getProductPrice());
+
+        $this->em->persist($orderItemRecord);
 
         $this->em->flush();
 
-        return $orderItem;
+        $orderItem->setId($orderItemRecord->getId());
     }
 
-    public function update(OrderItemRecord $orderItem): OrderItemRecord
+    public function update(OrderItem $orderItem): void
     {
-        $this->em->persist($orderItem);
+        $orderItemRecord = $this->find($orderItem->getId());
+
+        $orderItemRecord->setQuantity($orderItem->getQuantity());
+        $orderItemRecord->setProductId($orderItem->getProductId());
+        $orderItemRecord->setProductCode($orderItem->getProductCode());
+        $orderItemRecord->setProductPrice($orderItem->getProductPrice());
+
+        $this->em->persist($orderItemRecord);
 
         $this->em->flush();
 
-        return $orderItem;
     }
 
 }

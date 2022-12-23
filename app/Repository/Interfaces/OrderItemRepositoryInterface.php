@@ -12,6 +12,6 @@ interface OrderItemRepositoryInterface
 
     public function add(OrderItem $orderItem): void;
 
-    public function update(OrderItem $orderItem): ?OrderItemRecord;
+    public function update(OrderItem $orderItem): void;
 
 }

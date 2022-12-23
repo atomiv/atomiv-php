@@ -14,7 +14,7 @@ interface ProductRepositoryInterface
 
     public function add(Product $product): void;
 
-    public function update(Product $product): ProductRecord;
+    public function update(Product $product): void;
 
     public function remove(Product $product): void;
 
